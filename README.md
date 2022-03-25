@@ -1,1 +1,8 @@
-# -Lua-LOVE---love2d-biblioteka-igrica
+# Monster Escape (ime podložno promeni)
+
+## Opis
+...
+
+## Autori
+Luka Sparić
+Robert Doža
