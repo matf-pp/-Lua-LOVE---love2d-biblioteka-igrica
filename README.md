@@ -1,8 +1,10 @@
-# Monster Escape (ime podložno promeni)
+# Monster Escape (name subject to change)
 
-## Opis
-...
+## Description
+... TODO ...
 
-## Autori
+## Authors
+
 Luka Sparić
+
 Robert Doža
