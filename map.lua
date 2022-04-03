@@ -1,3 +1,5 @@
+require ("levels.testLvl")
+
 Map = {}
 
 function Map:load()
@@ -5,6 +7,12 @@ function Map:load()
     local height_ratio = 3 / 5
     local margin_x, margin_y
     local margin_ratio = 1 / 50
+
+    map_images = require("levels.testLvl")
+
+    wall = love.graphics.newImage("images/wall.png")
+    path = love.graphics.newImage("images/path.png")
+    start = love.graphics.newImage("images/start.png")
 
     --[[
         Karakteristike mape:
@@ -201,12 +209,22 @@ function Map:draw()
     for index, value in pairs(Contents) do
         print(value)
     end
-
+    i = 1
     -- Crtanje polja grid-a
     love.graphics.setColor(224/255, 235/255, 38/255)
     for _, row in pairs(self.grid) do
         for _, field in pairs(row) do
+            if map_images.data[i] == 1 then
+                love.graphics.draw(start, field.x, field.y)
+            elseif map_images.data[i] == 2 then
+                love.graphics.draw(wall, field.x, field.y)
+            elseif map_images.data[i] == 3 then
+                love.graphics.draw(path, field.x, field.y)
+            else
+    
             love.graphics.rectangle("line", field.x, field.y, self.field_side, self.field_side)
+            end
+            i=i+1
         end
     end
 end
