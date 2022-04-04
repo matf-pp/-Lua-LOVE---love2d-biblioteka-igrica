@@ -1,5 +1,10 @@
 require ("levels.testLvl")
 
+local map_images
+local wall
+local path
+local start
+
 Map = {}
 
 function Map:load()
@@ -209,9 +214,10 @@ function Map:draw()
     for index, value in pairs(Contents) do
         print(value)
     end
-    i = 1
+    
     -- Crtanje polja grid-a
     love.graphics.setColor(224/255, 235/255, 38/255)
+    local i = 1
     for _, row in pairs(self.grid) do
         for _, field in pairs(row) do
             if map_images.data[i] == 1 then
@@ -221,8 +227,7 @@ function Map:draw()
             elseif map_images.data[i] == 3 then
                 love.graphics.draw(path, field.x, field.y)
             else
-    
-            love.graphics.rectangle("line", field.x, field.y, self.field_side, self.field_side)
+                love.graphics.rectangle("line", field.x, field.y, self.field_side, self.field_side)
             end
             i=i+1
         end
