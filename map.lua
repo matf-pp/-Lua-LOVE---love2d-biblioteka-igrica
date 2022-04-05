@@ -1,6 +1,5 @@
-require ("levels.testLvl")
+local map_images = require ("levels.testLvl")
 
-local map_images
 local wall
 local path
 local start
@@ -12,8 +11,6 @@ function Map:load()
     local height_ratio = 3 / 5
     local margin_x, margin_y
     local margin_ratio = 1 / 50
-
-    map_images = require("levels.testLvl")
 
     wall = love.graphics.newImage("images/wall.png")
     path = love.graphics.newImage("images/path.png")
@@ -132,14 +129,15 @@ local delete_me = {}
 function Map:update(dt)
     -- TODO
     if start_debug == true then
-        local path = self:find_path(1, 1, 2, 3) 
+        local path = self:find_path(1, 1, 9, 20) 
         if next(path) == nil then
             print("path not found")
         else
             print("path found:")
             for i = #path, 1, -1 do
-                print(path[i].to_string)
+                io.write(path[i].to_string .. " -> ")
             end
+            print("done")
         end
 
         for _, value in pairs(delete_me) do
@@ -251,11 +249,11 @@ function Map:draw()
     local i = 1
     for _, row in pairs(self.grid) do
         for _, field in pairs(row) do
-            if map_images.data[i] == 1 then
+            if map_images.data[i] == map_images.start_id then
                 love.graphics.draw(start, field.x, field.y)
-            elseif map_images.data[i] == 2 then
+            elseif map_images.data[i] == map_images.wall_id then
                 love.graphics.draw(wall, field.x, field.y)
-            elseif map_images.data[i] == 3 then
+            elseif map_images.data[i] == map_images.path_id then
                 love.graphics.draw(path, field.x, field.y)
             else
                 love.graphics.rectangle("line", field.x, field.y, self.field_side, self.field_side)
