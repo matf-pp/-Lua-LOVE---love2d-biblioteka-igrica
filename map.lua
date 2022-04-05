@@ -1,4 +1,8 @@
-require ("levels.testLvl")
+local map_images = require ("levels.testLvl")
+
+local wall
+local path
+local start
 
 Map = {}
 
@@ -7,8 +11,6 @@ function Map:load()
     local height_ratio = 3 / 5
     local margin_x, margin_y
     local margin_ratio = 1 / 50
-
-    map_images = require("levels.testLvl")
 
     wall = love.graphics.newImage("images/wall.png")
     path = love.graphics.newImage("images/path.png")
@@ -49,61 +51,100 @@ function Map:load()
             - tipu polja
             ...
     --]]
+    local k = 1
     self.grid = {}
     for i = 1, self.m, 1 do
         self.grid[i] = {}
         for j = 1, self.n, 1 do
             self.grid[i][j] = {}
-            self.grid[i][j].row = i
-            self.grid[i][j].column = j
+            local field = self.grid[i][j]
 
-            self.grid[i][j].to_string = "cvor " .. i .. " " .. j
-            self.grid[i][j].neighbors = {}
-            self.grid[i][j].visited = false
-            self.grid[i][j].distance = -1
-            self.grid[i][j].previous = nil
+            -- opsti podaci
+            field.row = i
+            field.column = j
 
-            self.grid[i][j].x = self.grid_x + (self.grid[i][j].column - 1) * self.field_side
-            self.grid[i][j].y = self.grid_y + (self.grid[i][j].row - 1) * self.field_side
+            -- podaci potrebni za svrhe algoritama
+            field.to_string = "cvor " .. i .. " " .. j
+            field.neighbors = {}
+            field.visited = false
+            field.distance = -1
+            field.previous = nil
+
+            field.has_wall = false
+            if map_images.data[k] == 2 then
+                field.has_wall = true
+            end
+            k = k + 1
+
+            -- podaci potrebni za grafiku
+            field.x = self.grid_x + (field.column - 1) * self.field_side
+            field.y = self.grid_y + (field.row - 1) * self.field_side
         end
     end
 
     -- Kroz ovu petlju se postavljaju grane grafa, odn. svakom cvoru se dodeljuju susedi
     for i = 1, self.m, 1 do
         for j = 1, self.n, 1 do
-            local index = 0
+            local current = self.grid[i][j]
+            current.neighbors = {}
+            
+            -- up
             if self.grid[i-1] ~= nil then
-                index = index + 1
-                self.grid[i][j]["neighbors"][index] = self.grid[i-1][j]
+                local up = self.grid[i-1][j]
+                if up.has_wall == false then
+                    table.insert(current.neighbors, up)
+                end
             end
+
+            -- down
             if self.grid[i+1] ~= nil then
-                index = index + 1
-                self.grid[i][j]["neighbors"][index] = self.grid[i+1][j]
+                local down = self.grid[i+1][j]
+                if down.has_wall == false then
+                    table.insert(current.neighbors, down)
+                end
             end
-            if self.grid[i][j-1] ~= nil then
-                index = index + 1
-                self.grid[i][j]["neighbors"][index] = self.grid[i][j-1]
+
+            -- left
+            local left = self.grid[i][j-1]
+            if left ~= nil then
+                if left.has_wall == false then
+                    table.insert(current.neighbors, left)
+                end
             end
-            if self.grid[i][j+1] ~= nil then
-                index = index + 1
-                self.grid[i][j]["neighbors"][index] = self.grid[i][j+1]
+
+            -- right
+            local right = self.grid[i][j+1]
+            if right ~= nil then
+                if right.has_wall == false then
+                    table.insert(current.neighbors, right)
+                end
             end
         end
     end
 end
 
-Go = true
+local start_debug = true
+local delete_me = {}
 
 function Map:update(dt)
     -- TODO
-    Contents = {}
-    
-    if Go == true then
-        local path = self:find_path(1, 1, 3, 2) 
-        for i = #path, 1, -1 do
-            print(path[i].to_string)
+    if start_debug == true then
+        local path = self:find_path(1, 1, 9, 20) 
+        if next(path) == nil then
+            print("path not found")
+        else
+            print("path found:")
+            for i = #path, 1, -1 do
+                io.write(path[i].to_string .. " -> ")
+            end
+            print("done")
         end
-        Go = false
+
+        for _, value in pairs(delete_me) do
+            print(value)
+        end
+
+        start_debug = false
     end
 end
 
@@ -175,19 +216,18 @@ function Map:find_path(i1, j1, i2, j2)
 
     local result = {}
     local current = self.grid[i2][j2]
-    while current.previous ~= nil do
-        table.insert(result, current)
-        current = current.previous
+    if current.previous ~= nil then
+        while current.previous ~= nil do
+            table.insert(result, current)
+            current = current.previous
+        end 
+        table.insert(result, start)
     end
-    table.insert(result, start)
 
     for i = 1, self.m, 1 do
         for j = 1, self.n, 1 do
             self.grid[i][j].visited = false
-            -- TODO: obrisati
-            -- print(self.grid[i][j].to_string .. ": " .. self.grid[i][j].distance)
             self.grid[i][j].distance = -1
-            -- print(self.grid[i][j].to_string .. ": " .. self.grid[i][j].previous)
             self.grid[i][j].previous = nil
         end
     end
@@ -203,26 +243,20 @@ function Map:draw()
     -- Pozadina grid-a
     love.graphics.setColor(36/255, 64/255, 201/255)
     love.graphics.rectangle("fill", self.grid_x, self.grid_y, self.grid_width, self.grid_height)
-
-    -- TMP: ispis za proveru find_path funkcije
-    love.graphics.setColor(1, 0, 0)
-    for index, value in pairs(Contents) do
-        print(value)
-    end
-    i = 1
+    
     -- Crtanje polja grid-a
     love.graphics.setColor(224/255, 235/255, 38/255)
+    local i = 1
     for _, row in pairs(self.grid) do
         for _, field in pairs(row) do
-            if map_images.data[i] == 1 then
+            if map_images.data[i] == map_images.start_id then
                 love.graphics.draw(start, field.x, field.y)
-            elseif map_images.data[i] == 2 then
+            elseif map_images.data[i] == map_images.wall_id then
                 love.graphics.draw(wall, field.x, field.y)
-            elseif map_images.data[i] == 3 then
+            elseif map_images.data[i] == map_images.path_id then
                 love.graphics.draw(path, field.x, field.y)
             else
-    
-            love.graphics.rectangle("line", field.x, field.y, self.field_side, self.field_side)
+                love.graphics.rectangle("line", field.x, field.y, self.field_side, self.field_side)
             end
             i=i+1
         end
