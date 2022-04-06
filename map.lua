@@ -1,5 +1,10 @@
 local map_data = require ("levels.testLvl")
 
+local wall_image = love.graphics.newImage("images/wall.png")
+local path_image = love.graphics.newImage("images/path.png")
+local start_image = love.graphics.newImage("images/start.png")
+local end_image = love.graphics.newImage("images/start.png")
+
 Map = {}
 
 function Map:load()
@@ -83,6 +88,20 @@ function Map:load()
             -- podaci potrebni za grafiku
             field.x = self.grid_x + (field.column - 1) * self.field_side
             field.y = self.grid_y + (field.row - 1) * self.field_side
+
+            function field:draw()
+                love.graphics.setColor(1, 1, 1)
+            
+                if self.is_start then
+                    love.graphics.draw(start_image, self.x, self.y)
+                elseif self.is_end then
+                    love.graphics.draw(end_image, self.x, self.y)
+                elseif self.has_wall then
+                    love.graphics.draw(wall_image, self.x, self.y)
+                else
+                    love.graphics.draw(path_image, self.x, self.y)
+                end
+            end
         end
     end
 
@@ -143,6 +162,12 @@ function Map:add_wall(x, y)
     local j = math.floor(dx / self.field_side) + 1
 
     if i <= 0 or i > self.m or j <= 0 or j > self.n then
+        return false
+    end
+
+    local field = self.grid[i][j]
+
+    if field.is_start or field.is_end or field.has_wall then
         return false
     end
 
@@ -264,44 +289,17 @@ function Map:find_path(i1, j1, i2, j2)
 end
 
 function Map:draw()
-    -- Pozadina cele mape
+    -- Crtanje pozadine mape
     love.graphics.setColor(0, 0, 0)
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 
-    -- Pozadina grid-a
-    love.graphics.setColor(36/255, 64/255, 201/255)
-    love.graphics.rectangle("fill", self.grid_x, self.grid_y, self.grid_width, self.grid_height)
-
-    -- Crtanje polja grid-a
-    local wall_image = love.graphics.newImage("images/wall.png")
-    local path_image = love.graphics.newImage("images/path.png")
-    local start_image = love.graphics.newImage("images/start.png")
-    local end_image = love.graphics.newImage("images/start.png")
-
-    love.graphics.setColor(224/255, 235/255, 38/255)
-
+    -- Crtanje mape
     for _, row in pairs(self.grid) do
         for _, field in pairs(row) do
-            if field.is_start then
-                love.graphics.draw(start_image, field.x, field.y)
-            elseif field.is_end then
-                love.graphics.draw(end_image, field.x, field.y)
-            elseif field.has_wall then
-                love.graphics.draw(wall_image, field.x, field.y)
-            else
-                love.graphics.draw(path_image, field.x, field.y)
-            end
+            field:draw()
         end
     end
 
-    -- test
     love.graphics.setColor(1, 1, 1)
-    love.graphics.circle("fill", 5, 5, 5)
-    love.graphics.circle("fill", 30, 30, 5)
-    love.graphics.circle("fill", 100, 30, 5)
-    love.graphics.circle("fill", 230, 70, 5)
-    love.graphics.circle("fill", 230, 120, 5)
-    love.graphics.circle("fill", 530, 440, 5)
-    love.graphics.circle("fill", 530, 460, 5)
-    love.graphics.circle("fill", 1000, 350, 5)
+    love.graphics.circle("fill", 200, 300, 5)
 end
