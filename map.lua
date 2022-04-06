@@ -1,4 +1,4 @@
-local map_images = require ("levels.testLvl")
+local map_data = require ("levels.testLvl")
 
 Map = {}
 
@@ -63,9 +63,21 @@ function Map:load()
             field.previous = nil
 
             field.has_wall = false
-            if map_images.data[k] == 2 then
+            field.is_start = false
+            field.is_end = false
+
+            if map_data.data[k] == map_data.wall_id then
                 field.has_wall = true
             end
+
+            if map_data.data[k] == map_data.start_id then
+                field.is_start = true
+            end
+
+            if map_data.data[k] == map_data.end_id then
+                field.is_end = true
+            end
+
             k = k + 1
 
             -- podaci potrebni za grafiku
@@ -113,6 +125,30 @@ function Map:load()
             end
         end
     end
+end
+
+--[[
+    Funkcija prima koordinate klika na ekranu. Ako je kliknuto na polje na grid-u, radi sledece:
+    - ako je u pitanju path, postavlja wall;
+    - ako je u pitanju wall, start ili end, ne radi nista;
+    itd.
+    Povratna vrednost je tipa bool i predstavlja uspeh pri postavljanju wall-a:
+    - ako je uspelo, vraca true,
+    - u suprotnom, false
+]]
+function Map:add_wall(x, y)
+    local dx = x - self.grid_x
+    local dy = y - self.grid_y
+    local i = math.floor(dy / self.field_side) + 1
+    local j = math.floor(dx / self.field_side) + 1
+
+    if i <= 0 or i > self.m or j <= 0 or j > self.n then
+        return false
+    end
+
+    self.grid[i][j].has_wall = true
+
+    return true
 end
 
 local start_debug = true
@@ -246,13 +282,13 @@ function Map:draw()
     local i = 1
     for _, row in pairs(self.grid) do
         for _, field in pairs(row) do
-            if map_images.data[i] == map_images.start_id then
+            if map_data.data[i] == map_data.start_id then
                 love.graphics.draw(start_image, field.x, field.y)
-            elseif map_images.data[i] == map_images.end_id then
+            elseif map_data.data[i] == map_data.end_id then
                 love.graphics.draw(end_image, field.x, field.y)
-            elseif map_images.data[i] == map_images.wall_id then
+            elseif map_data.data[i] == map_data.wall_id then
                 love.graphics.draw(wall_image, field.x, field.y)
-            elseif map_images.data[i] == map_images.path_id then
+            elseif map_data.data[i] == map_data.path_id then
                 love.graphics.draw(path_image, field.x, field.y)
             else
                 love.graphics.rectangle("line", field.x, field.y, self.field_side, self.field_side)
@@ -260,4 +296,15 @@ function Map:draw()
             i=i+1
         end
     end
+
+    -- test
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.circle("fill", 5, 5, 5)
+    love.graphics.circle("fill", 30, 30, 5)
+    love.graphics.circle("fill", 100, 30, 5)
+    love.graphics.circle("fill", 230, 70, 5)
+    love.graphics.circle("fill", 230, 120, 5)
+    love.graphics.circle("fill", 530, 440, 5)
+    love.graphics.circle("fill", 530, 460, 5)
+    love.graphics.circle("fill", 1000, 350, 5)
 end

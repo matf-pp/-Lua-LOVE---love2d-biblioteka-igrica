@@ -1,3 +1,5 @@
+require("map")
+
 Shop = {}
 
 function Shop:load()
@@ -16,6 +18,15 @@ end
 
 function Shop:update(dt)
     -- TODO
+
+    -- test (Robert):
+    -- Map:add_wall(5, 5)
+    -- Map:add_wall(30, 30)
+    -- Map:add_wall(100, 30)
+    -- Map:add_wall(230, 70)
+    -- Map:add_wall(230, 120)
+    -- Map:add_wall(530, 440)
+    Map:add_wall(1000, 350)
 end
 
 function Shop:draw()
