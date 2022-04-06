@@ -1,9 +1,5 @@
 local map_images = require ("levels.testLvl")
 
-local wall
-local path
-local start
-
 Map = {}
 
 function Map:load()
@@ -11,10 +7,6 @@ function Map:load()
     local height_ratio = 3 / 5
     local margin_x, margin_y
     local margin_ratio = 1 / 50
-
-    wall = love.graphics.newImage("images/wall.png")
-    path = love.graphics.newImage("images/path.png")
-    start = love.graphics.newImage("images/start.png")
 
     --[[
         Karakteristike mape:
@@ -243,18 +235,25 @@ function Map:draw()
     -- Pozadina grid-a
     love.graphics.setColor(36/255, 64/255, 201/255)
     love.graphics.rectangle("fill", self.grid_x, self.grid_y, self.grid_width, self.grid_height)
-    
+
     -- Crtanje polja grid-a
+    local wall_image = love.graphics.newImage("images/wall.png")
+    local path_image = love.graphics.newImage("images/path.png")
+    local start_image = love.graphics.newImage("images/start.png")
+    local end_image = love.graphics.newImage("images/start.png")
+
     love.graphics.setColor(224/255, 235/255, 38/255)
     local i = 1
     for _, row in pairs(self.grid) do
         for _, field in pairs(row) do
             if map_images.data[i] == map_images.start_id then
-                love.graphics.draw(start, field.x, field.y)
+                love.graphics.draw(start_image, field.x, field.y)
+            elseif map_images.data[i] == map_images.end_id then
+                love.graphics.draw(end_image, field.x, field.y)
             elseif map_images.data[i] == map_images.wall_id then
-                love.graphics.draw(wall, field.x, field.y)
+                love.graphics.draw(wall_image, field.x, field.y)
             elseif map_images.data[i] == map_images.path_id then
-                love.graphics.draw(path, field.x, field.y)
+                love.graphics.draw(path_image, field.x, field.y)
             else
                 love.graphics.rectangle("line", field.x, field.y, self.field_side, self.field_side)
             end
