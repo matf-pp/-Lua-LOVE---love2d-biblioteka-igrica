@@ -279,21 +279,18 @@ function Map:draw()
     local end_image = love.graphics.newImage("images/start.png")
 
     love.graphics.setColor(224/255, 235/255, 38/255)
-    local i = 1
+
     for _, row in pairs(self.grid) do
         for _, field in pairs(row) do
-            if map_data.data[i] == map_data.start_id then
+            if field.is_start then
                 love.graphics.draw(start_image, field.x, field.y)
-            elseif map_data.data[i] == map_data.end_id then
+            elseif field.is_end then
                 love.graphics.draw(end_image, field.x, field.y)
-            elseif map_data.data[i] == map_data.wall_id then
+            elseif field.has_wall then
                 love.graphics.draw(wall_image, field.x, field.y)
-            elseif map_data.data[i] == map_data.path_id then
-                love.graphics.draw(path_image, field.x, field.y)
             else
-                love.graphics.rectangle("line", field.x, field.y, self.field_side, self.field_side)
+                love.graphics.draw(path_image, field.x, field.y)
             end
-            i=i+1
         end
     end
 
