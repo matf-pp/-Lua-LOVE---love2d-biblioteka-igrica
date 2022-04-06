@@ -1,53 +1,23 @@
-local map_data = require ("levels.testLvl")
-
-local wall_image = love.graphics.newImage("images/wall.png")
-local path_image = love.graphics.newImage("images/path.png")
-local start_image = love.graphics.newImage("images/start.png")
-local end_image = love.graphics.newImage("images/start.png")
+local level_data = require ("levels.testLvl")
+local map_data = require("config.map_config")
 
 Map = {}
 
 function Map:load()
-    -- Pomocne promenljive za podesavanje mape
-    local height_ratio = 3 / 5
-    local margin_x, margin_y
-    local margin_ratio = 1 / 50
+    -- koordinate gornjeg levog ugla mape
+    self.x, self.y = map_data.x, map_data.y
+    -- sirina i visina mape
+    self.width, self.height = map_data.width, map_data.height
+    -- broj vrsta i kolona u grid-u
+    self.m, self.n = map_data.num_rows, map_data.num_columns
+    -- koordinate gornjeg levog ugla grid-a
+    self.grid_x, self.grid_y = map_data.grid_x, map_data.grid_y
+    -- sirina i visina grid-a
+    self.grid_width, self.grid_height = map_data.grid_width, map_data.grid_height
+    -- duzina stranice polja
+    self.field_side = map_data.field_side
 
-    --[[
-        Karakteristike mape:
-        x, y - koordinate gornjeg levog ugla mape (gledano kao prozora)
-        width, height - sirina i visina mape (isto gledano kao prozora)
-        m, n - broj vrsta i broj kolona
-        grid_x, grid_y - koordinate gornjeg levog ugla grid-a odn. onog dela mape gde se nalaze polja
-        grid_width, gird_height - sirina i visina grid-a
-        field_size - duzina stranice polja (polje = kvadrat)
-    --]]
-    self.x = 0
-    self.y = 0
-    self.width = love.graphics.getWidth()
-    self.height = love.graphics.getHeight() * height_ratio
-    self.m = 9
-    self.n = 20
-    margin_y = margin_ratio * love.graphics.getHeight()
-    self.grid_height = self.height - 2 * margin_y
-    self.field_side = self.grid_height / self.m
-    self.grid_width = self.n * self.field_side
-    margin_x = (self.width - self.grid_width) / 2
-    self.grid_x = self.x + margin_x
-    self.grid_y = self.y + margin_y
-
-    --[[
-        Grid sam zamislio da bude poseban deo koji se odnosi na polja mape odn. koji ce biti
-        po svojoj strukturi graf u kome su cvorovi polja mape. Polja sadrze odredjene podatke,
-        a algoritam i ostale stvari bi se implementirale nad grid-om.
-        Grid je, dakle, niz vrsta, a svaka vrsta je niz polja.
-        Polje ce imati podatke koji ce biti korisni za dalju implementaciju, poput:
-            - podataka o redu i koloni u grid-u
-            - podataka o susedima
-            - posecenosti polja
-            - tipu polja
-            ...
-    --]]
+    -- grid - grafovska reprezentacija polja na mapi
     local k = 1
     self.grid = {}
     for i = 1, self.m, 1 do
@@ -67,39 +37,39 @@ function Map:load()
             field.distance = -1
             field.previous = nil
 
+            -- podaci o karakteristikama polja, odn. njegovom tipu
             field.has_wall = false
             field.is_start = false
             field.is_end = false
 
-            if map_data.data[k] == map_data.wall_id then
+            if level_data.data[k] == level_data.wall_id then
                 field.has_wall = true
             end
 
-            if map_data.data[k] == map_data.start_id then
+            if level_data.data[k] == level_data.start_id then
                 field.is_start = true
             end
 
-            if map_data.data[k] == map_data.end_id then
+            if level_data.data[k] == level_data.end_id then
                 field.is_end = true
             end
-
             k = k + 1
 
-            -- podaci potrebni za grafiku
+            -- grafika polja
             field.x = self.grid_x + (field.column - 1) * self.field_side
             field.y = self.grid_y + (field.row - 1) * self.field_side
 
             function field:draw()
                 love.graphics.setColor(1, 1, 1)
-            
+
                 if self.is_start then
-                    love.graphics.draw(start_image, self.x, self.y)
+                    love.graphics.draw(level_data.images.start_image, self.x, self.y)
                 elseif self.is_end then
-                    love.graphics.draw(end_image, self.x, self.y)
+                    love.graphics.draw(level_data.images.end_image, self.x, self.y)
                 elseif self.has_wall then
-                    love.graphics.draw(wall_image, self.x, self.y)
+                    love.graphics.draw(level_data.images.wall_image, self.x, self.y)
                 else
-                    love.graphics.draw(path_image, self.x, self.y)
+                    love.graphics.draw(level_data.images.path_image, self.x, self.y)
                 end
             end
         end
@@ -148,8 +118,8 @@ end
 
 --[[
     Funkcija prima koordinate klika na ekranu. Ako je kliknuto na polje na grid-u, radi sledece:
-    - ako je u pitanju path, postavlja wall;
-    - ako je u pitanju wall, start ili end, ne radi nista;
+        - ako je u pitanju path, postavlja wall;
+        - ako je u pitanju wall, start ili end, ne radi nista;
     itd.
     Povratna vrednost je tipa bool i predstavlja uspeh pri postavljanju wall-a:
     - ako je uspelo, vraca true,
@@ -177,12 +147,11 @@ function Map:add_wall(x, y)
 end
 
 local start_debug = true
-local delete_me = {}
 
 function Map:update(dt)
     -- TODO
     if start_debug == true then
-        local path = self:find_path(1, 1, 9, 20) 
+        local path = self:find_path(self.grid[1][1], self.grid[9][20]) 
         if next(path) == nil then
             print("path not found")
         else
@@ -193,18 +162,14 @@ function Map:update(dt)
             print("done")
         end
 
-        for _, value in pairs(delete_me) do
-            print(value)
-        end
-
         start_debug = false
     end
 end
 
 --[[
-    Funkcija uzima "cvorove" A i B i pokusava da nadje najkraci put od A do B.
+    TODO: opis funkcije
 --]]
-function Map:find_path(i1, j1, i2, j2)
+function Map:find_path(start, finish)
     Queue = {}
 
     function Queue.new()
@@ -243,7 +208,6 @@ function Map:find_path(i1, j1, i2, j2)
     end
 
     local queue = Queue.new()
-    local start = self.grid[i1][j1]
 
     start.distance = 0
     Queue.push(queue, start)
@@ -268,7 +232,7 @@ function Map:find_path(i1, j1, i2, j2)
     end
 
     local result = {}
-    local current = self.grid[i2][j2]
+    local current = finish
     if current.previous ~= nil then
         while current.previous ~= nil do
             table.insert(result, current)
@@ -289,17 +253,14 @@ function Map:find_path(i1, j1, i2, j2)
 end
 
 function Map:draw()
-    -- Crtanje pozadine mape
+    -- crtanje pozadine mape
     love.graphics.setColor(0, 0, 0)
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 
-    -- Crtanje mape
+    -- crtanje grid-a
     for _, row in pairs(self.grid) do
         for _, field in pairs(row) do
             field:draw()
         end
     end
-
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.circle("fill", 200, 300, 5)
 end
