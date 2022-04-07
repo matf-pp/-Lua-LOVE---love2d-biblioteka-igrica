@@ -80,7 +80,48 @@ function Map:load()
         end
     end
 
-    -- Kroz ovu petlju se postavljaju grane grafa, odn. svakom cvoru se dodeljuju susedi
+    -- postavljanje grana u grafu
+    self:set_branches()
+end
+
+local start_debug = true
+
+function Map:update(dt)
+    -- TODO
+    if start_debug == true then
+        local path = self:find_path()
+        if next(path) == nil then
+            print("path not found")
+        else
+            print("path found:")
+            for _, value in pairs(path) do
+                io.write(value.to_string .. " -> ")
+            end
+            print("done")
+        end
+
+        start_debug = false
+    end
+end
+
+function Map:draw()
+    -- crtanje pozadine mape
+    -- TODO: 
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+
+    -- crtanje grid-a
+    for _, row in pairs(self.grid) do
+        for _, field in pairs(row) do
+            field:draw()
+        end
+    end
+end
+
+--[[
+    Funkcija postavlja grane grafa.
+]]
+function Map:set_branches()
     for i = 1, self.m, 1 do
         for j = 1, self.n, 1 do
             local current = self.grid[i][j]
@@ -123,12 +164,12 @@ end
 
 --[[
     Funkcija prima koordinate klika na ekranu. Ako je kliknuto na polje na grid-u, radi sledece:
-        - ako je u pitanju path, postavlja wall;
-        - ako je u pitanju wall, start ili end, ne radi nista;
-    itd.
-    Povratna vrednost je tipa bool i predstavlja uspeh pri postavljanju wall-a:
-    - ako je uspelo, vraca true,
-    - u suprotnom, false
+        ako je u pitanju path, postavlja wall,
+        ako je u pitanju wall, start ili end, ne radi nista,
+        itd.
+    Povratna vrednost je tipa bool i predstavlja uspeh pri postavljanju zida:
+        ako je uspelo, vraca true,
+        u suprotnom, false
 ]]
 function Map:add_wall(x, y)
     local dx = x - self.grid_x
@@ -149,26 +190,6 @@ function Map:add_wall(x, y)
     self.grid[i][j].has_wall = true
 
     return true
-end
-
-local start_debug = true
-
-function Map:update(dt)
-    -- TODO
-    if start_debug == true then
-        local path = self:find_path()
-        if next(path) == nil then
-            print("path not found")
-        else
-            print("path found:")
-            for _, value in pairs(path) do
-                io.write(value.to_string .. " -> ")
-            end
-            print("done")
-        end
-
-        start_debug = false
-    end
 end
 
 --[[
@@ -264,18 +285,4 @@ function Map:find_path_2(start, finish)
         table.insert(result_reverse, result[i])
     end
     return result_reverse
-end
-
-function Map:draw()
-    -- crtanje pozadine mape
-    -- TODO: 
-    love.graphics.setColor(0, 0, 0)
-    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
-
-    -- crtanje grid-a
-    for _, row in pairs(self.grid) do
-        for _, field in pairs(row) do
-            field:draw()
-        end
-    end
 end
