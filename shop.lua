@@ -1,4 +1,4 @@
-require("map")
+require("map.map")
 
 Shop = {}
 

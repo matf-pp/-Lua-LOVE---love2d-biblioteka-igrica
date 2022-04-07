@@ -1,5 +1,5 @@
-local level_data = require ("levels.testLvl")
-local map_data = require("config.map_config")
+local level_data = require("levels.test_level_01")
+local map_data = require("map.map_config")
 
 Map = {}
 
@@ -17,8 +17,7 @@ function Map:load()
     -- duzina stranice polja
     self.field_side = map_data.field_side
     -- pocetak i kraj
-    self.start_field = {}
-    self.end_field = {}
+    self.start_field, self.end_field = {}, {}
 
     -- grid - grafovska reprezentacija polja na mapi
     local k = 1
@@ -39,11 +38,14 @@ function Map:load()
             field.visited = false
             field.distance = -1
             field.previous = nil
+            
+            field.damage = 0
 
             -- podaci o karakteristikama polja, odn. njegovom tipu
             field.has_wall = false
             field.is_start = false
             field.is_end = false
+            field.has_spikes = false
 
             if level_data.data[k] == level_data.wall_id then
                 field.has_wall = true
@@ -58,6 +60,12 @@ function Map:load()
                 field.is_end = true
                 self.end_field = field
             end
+
+            if level_data.data[k] == level_data.spikes_id then
+                field.has_spikes = true
+                field.damage = field.damage + 1
+            end
+
             k = k + 1
 
             -- grafika polja
@@ -73,6 +81,8 @@ function Map:load()
                     love.graphics.draw(level_data.images.end_image, self.x, self.y)
                 elseif self.has_wall then
                     love.graphics.draw(level_data.images.wall_image, self.x, self.y)
+                elseif self.has_spikes then
+                    --
                 else
                     love.graphics.draw(level_data.images.path_image, self.x, self.y)
                 end
@@ -87,9 +97,9 @@ end
 local start_debug = true
 
 function Map:update(dt)
-    -- TODO
     if start_debug == true then
         local path = self:find_path()
+
         if next(path) == nil then
             print("path not found")
         else
@@ -99,14 +109,12 @@ function Map:update(dt)
             end
             print("done")
         end
-
         start_debug = false
     end
 end
 
 function Map:draw()
     -- crtanje pozadine mape
-    -- TODO: 
     love.graphics.setColor(0, 0, 0)
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 
@@ -197,7 +205,23 @@ end
         odn. prazan table ako putanja ne postoji.
 ]]
 function Map:find_path()
-    return self:find_path_2(self.start_field, self.end_field)
+    local paths = self:all_paths(self.start_field, self.end_field)
+    table.sort(paths, function (a, b)
+        if a.life_cost > b.life_cost then
+            return false
+        else
+            return a.length < b.length
+        end
+    end)
+    
+    local result_reverse = paths[1].nodes
+    local result = {}
+
+    for i = #result_reverse, 1, -1 do
+        table.insert(result, result_reverse[i])
+    end
+
+    return result
 end
 
 function Map:find_path_2(start, finish)
@@ -268,7 +292,7 @@ function Map:find_path_2(start, finish)
         while current.previous ~= nil do
             table.insert(result, current)
             current = current.previous
-        end 
+        end
         table.insert(result, start)
     end
 
@@ -285,4 +309,37 @@ function Map:find_path_2(start, finish)
         table.insert(result_reverse, result[i])
     end
     return result_reverse
+end
+
+function Map:all_paths(start, finish)
+    if start == finish then
+        local result = {}
+        
+        local path = {}
+        path.nodes = {}
+        table.insert(path.nodes, finish)
+        path.length = 1
+        path.life_cost = finish.damage
+
+        table.insert(result, path)
+        return result
+    end
+
+    start.visited = true
+    local paths = {}
+    
+    for _, neighbor in pairs(start.neighbors) do
+        if neighbor.visited == false then
+            local neighbor_paths = self:all_paths(neighbor, finish)
+            for _, neighbor_path in pairs(neighbor_paths) do
+                table.insert(neighbor_path.nodes, start)
+                neighbor_path.length = neighbor_path.length + 1
+                neighbor_path.life_cost = neighbor_path.life_cost + start.damage
+                table.insert(paths, neighbor_path)
+            end
+        end
+    end
+
+    start.visited = false
+    return paths
 end
