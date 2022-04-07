@@ -16,6 +16,9 @@ function Map:load()
     self.grid_width, self.grid_height = map_data.grid_width, map_data.grid_height
     -- duzina stranice polja
     self.field_side = map_data.field_side
+    -- pocetak i kraj
+    self.start_field = {}
+    self.end_field = {}
 
     -- grid - grafovska reprezentacija polja na mapi
     local k = 1
@@ -48,10 +51,12 @@ function Map:load()
 
             if level_data.data[k] == level_data.start_id then
                 field.is_start = true
+                self.start_field = field
             end
 
             if level_data.data[k] == level_data.end_id then
                 field.is_end = true
+                self.end_field = field
             end
             k = k + 1
 
@@ -151,13 +156,13 @@ local start_debug = true
 function Map:update(dt)
     -- TODO
     if start_debug == true then
-        local path = self:find_path(self.grid[1][1], self.grid[9][20]) 
+        local path = self:find_path()
         if next(path) == nil then
             print("path not found")
         else
             print("path found:")
-            for i = #path, 1, -1 do
-                io.write(path[i].to_string .. " -> ")
+            for _, value in pairs(path) do
+                io.write(value.to_string .. " -> ")
             end
             print("done")
         end
@@ -167,9 +172,14 @@ function Map:update(dt)
 end
 
 --[[
-    TODO: opis funkcije
---]]
-function Map:find_path(start, finish)
+    Funkcija vraca table u kome se nalaze cvorovi na putanji od pocetnog do krajnjeg polja na mapi,
+        odn. prazan table ako putanja ne postoji.
+]]
+function Map:find_path()
+    return self:find_path_2(self.start_field, self.end_field)
+end
+
+function Map:find_path_2(start, finish)
     Queue = {}
 
     function Queue.new()
@@ -249,11 +259,16 @@ function Map:find_path(start, finish)
         end
     end
 
-    return result
+    local result_reverse = {}
+    for i = #result, 1, -1 do
+        table.insert(result_reverse, result[i])
+    end
+    return result_reverse
 end
 
 function Map:draw()
     -- crtanje pozadine mape
+    -- TODO: 
     love.graphics.setColor(0, 0, 0)
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 
