@@ -1,3 +1,5 @@
+require("map.map")
+
 Shop = {}
 
 function Shop:load()
@@ -14,8 +16,34 @@ function Shop:load()
     self.shop_font = love.graphics.newFont(14)
 end
 
+local start_debug = true
+
 function Shop:update(dt)
     -- TODO
+
+    -- test (Robert):
+    --[[        
+        if start_debug == true then
+            if Map:add_wall(70, 30) == true then
+                print("Uspesno dodat zid na koordinatama (70, 30)")
+            else
+                print("Neuspesno dodavanje zida na koordinatama (70, 30)")
+            end
+            
+            if Map:add_wall(250, 30) == true then
+                print("Uspesno dodat zid na koordinatama (250, 30)")
+            else
+                print("Neuspesno dodavanje zida na koordinatama (250, 30)")
+            end
+
+            if Map:add_wall(200, 100) == true then
+                print("Uspesno dodat zid na koordinatama (200, 300)")
+            else
+                print("Neuspesno dodavanje zida na koordinatama (200, 300)")
+            end
+        end
+        start_debug = false
+    ]]
 end
 
 function Shop:draw()
