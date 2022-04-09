@@ -2,6 +2,8 @@ local map_images = require ("levels.testLvl")
 
 Map = {}
 
+
+
 function Map:load()
     -- Pomocne promenljive za podesavanje mape
     local height_ratio = 3 / 5
@@ -233,7 +235,7 @@ function Map:draw()
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 
     -- Pozadina grid-a
-    love.graphics.setColor(36/255, 64/255, 201/255)
+    --love.graphics.setColor(36/255, 64/255, 201/255)
     love.graphics.rectangle("fill", self.grid_x, self.grid_y, self.grid_width, self.grid_height)
 
     -- Crtanje polja grid-a
@@ -242,7 +244,8 @@ function Map:draw()
     local start_image = love.graphics.newImage("images/start.png")
     local end_image = love.graphics.newImage("images/start.png")
 
-    love.graphics.setColor(224/255, 235/255, 38/255)
+    
+    love.graphics.setColor(1, 1, 1)
     local i = 1
     for _, row in pairs(self.grid) do
         for _, field in pairs(row) do
