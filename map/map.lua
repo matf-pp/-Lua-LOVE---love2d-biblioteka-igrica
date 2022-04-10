@@ -1,3 +1,5 @@
+
+
 local level_data = require("levels.test_level_01")
 local map_data = require("map.map_config")
 
@@ -98,17 +100,26 @@ local start_debug = true
 
 function Map:update(dt)
     if start_debug == true then
-        local path = self:find_path()
-
+        --local path = self:find_path()
+        path = self:find_path()
+        --indeksiranje krece od 1 u lua
+        i = 1
         if next(path) == nil then
             print("path not found")
         else
             print("path found:")
             for _, value in pairs(path) do
                 io.write(value.to_string .. " -> ")
+                
+                table.insert(Boss.positions,{value.row,value.column})
+                
+                i = i + 1
             end
             print("done")
+            
+            Boss.length = i
         end
+        
         start_debug = false
     end
 end

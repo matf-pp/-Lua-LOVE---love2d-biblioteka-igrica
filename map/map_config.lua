@@ -29,5 +29,5 @@ return {
     grid_y = grid_y,
     grid_width = grid_width,
     grid_height = grid_height,
-    field_side = field_side
+    field_side = field_side,
 }
