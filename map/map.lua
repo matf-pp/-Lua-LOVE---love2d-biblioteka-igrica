@@ -111,8 +111,8 @@ function Map:update(dt)
             for _, value in pairs(path) do
                 io.write(value.to_string .. " -> ")
                 
-                table.insert(Boss.positions,{value.row,value.column})
-                
+                table.insert(Boss.positions,{value.x,value.y})
+            
                 i = i + 1
             end
             print("done")
