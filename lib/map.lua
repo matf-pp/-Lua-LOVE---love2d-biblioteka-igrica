@@ -1,7 +1,5 @@
-
-
 local level_data = require("levels.test_level_01")
-local map_data = require("map.map_config")
+local map_data = require("lib.map_config")
 
 Map = {}
 

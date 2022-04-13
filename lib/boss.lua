@@ -1,5 +1,5 @@
-require("map.map")
-require("map.map_config")
+require("lib.map")
+require("lib.map_config")
 
 local index
 

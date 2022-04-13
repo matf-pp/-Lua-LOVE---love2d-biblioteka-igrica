@@ -1,4 +1,4 @@
-require("map.map")
+require("lib.map")
 
 BUTTON_WIDTH = 48
 

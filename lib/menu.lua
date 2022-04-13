@@ -16,7 +16,7 @@ Menu = {}
 local font = nil
 
 --da li raditi change the scene ili ostati sve na jednom ekranu?
-function Menu:load() 
+function Menu:load()
     font = love.graphics.newFont(32)
 
     table.insert(Menu, new_button(
@@ -55,7 +55,7 @@ function Menu:draw()
     local cursor_y = 0
 
     --indeks + dugme prolaz
-    for i,button in ipairs(Menu) do
+    for _, button in ipairs(Menu) do
         --resetovanje stanja dugmeta
         button.last = button.now
 

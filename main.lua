@@ -1,7 +1,7 @@
-require("map.map")
-require("shop")
-require("menu")
-require("boss")
+require("lib.map")
+require("lib.shop")
+require("lib.menu")
+require("lib.boss")
 
 function love.load()
     Map:load()
@@ -17,11 +17,9 @@ function love.update(dt)
     Boss:update(dt)
 end
 
-function love.draw()    
+function love.draw()
     Map:draw()
-    --Bitan redosled
     Boss:draw()
     Shop:draw()
     Menu:draw()
-    
 end
