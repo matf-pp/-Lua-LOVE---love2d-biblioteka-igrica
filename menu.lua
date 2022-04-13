@@ -1,7 +1,6 @@
 BUTTON_HEIGHT = 64
 
-
-function new_button(text, fn)
+local function new_button(text, fn)
     --funkcija koja pravi dugme kao povratnu vrednost daje table dugme
     return {
         text = text,
@@ -17,8 +16,7 @@ Menu = {}
 local font = nil
 
 --da li raditi change the scene ili ostati sve na jednom ekranu?
-function Menu:load()
-    
+function Menu:load() 
     font = love.graphics.newFont(32)
 
     table.insert(Menu, new_button(
@@ -94,8 +92,6 @@ function Menu:draw()
             by,
             button_width,
             BUTTON_HEIGHT
-            
-        
         )
         --boja teksta na dugmetu
         love.graphics.setColor(0,0,0,1)
@@ -104,7 +100,6 @@ function Menu:draw()
         --ugradjena funkcija racuna velicinu texta za dati font u pikselima
         local textW = font:getWidth(button.text)
         local textH = font:getHeight(button.text)
-
 
         love.graphics.print(
             button.text,

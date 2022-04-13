@@ -3,7 +3,6 @@ require("shop")
 require("menu")
 require("boss")
 
-
 function love.load()
     Map:load()
     Shop:load()

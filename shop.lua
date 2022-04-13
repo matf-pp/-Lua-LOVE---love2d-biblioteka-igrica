@@ -4,7 +4,7 @@ BUTTON_WIDTH = 48
 
 local level_data = require("levels.test_level_01")
 
-function new_button(text,fn)
+local function new_button(text,fn)
     return{
         text = text,
         fn = fn,
@@ -14,8 +14,6 @@ function new_button(text,fn)
         last = false
     }
 end
-
-
 
 Shop = {}
 

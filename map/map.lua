@@ -100,22 +100,19 @@ local start_debug = true
 
 function Map:update(dt)
     if start_debug == true then
-        --local path = self:find_path()
-        path = self:find_path()
+        local path = self:find_path()
         --indeksiranje krece od 1 u lua
-        i = 1
+        local i = 1
         if next(path) == nil then
             print("path not found")
         else
-            print("path found:")
+            --print("path found:")
             for _, value in pairs(path) do
-                io.write(value.to_string .. " -> ")
-                
+                --io.write(value.to_string .. " -> ")
                 table.insert(Boss.positions,{value.x,value.y})
-            
                 i = i + 1
             end
-            print("done")
+            --print("done")
             
             Boss.length = i
         end
