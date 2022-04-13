@@ -94,29 +94,8 @@ function Map:load()
     self:set_branches()
 end
 
-local start_debug = true
-
 function Map:update(dt)
-    if start_debug == true then
-        local path = self:find_path()
-        --indeksiranje krece od 1 u lua
-        local i = 1
-        if next(path) == nil then
-            print("path not found")
-        else
-            --print("path found:")
-            for _, value in pairs(path) do
-                --io.write(value.to_string .. " -> ")
-                table.insert(Boss.positions,{value.x,value.y})
-                i = i + 1
-            end
-            --print("done")
-            
-            Boss.length = i
-        end
-        
-        start_debug = false
-    end
+    --
 end
 
 function Map:draw()
@@ -212,13 +191,20 @@ end
 ]]
 function Map:find_path()
     local paths = self:all_paths(self.start_field, self.end_field)
-    table.sort(paths, function (a, b)
-        if a.life_cost > b.life_cost then
-            return false
-        else
-            return a.length < b.length
+    table.sort(
+        paths,
+        function (a, b)
+            if a.life_cost > b.life_cost then
+                return false
+            else
+                return a.length < b.length
+            end
         end
-    end)
+    )
+
+    if next(paths) == nil then
+        return {}
+    end
     
     local result_reverse = paths[1].nodes
     local result = {}

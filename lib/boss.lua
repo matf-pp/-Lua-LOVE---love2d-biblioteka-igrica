@@ -3,7 +3,7 @@ require("lib.map_config")
 
 local index
 
-Boss ={}
+Boss = {}
 
 local function startMove()
     Boss.timer = 0
@@ -14,7 +14,7 @@ end
 
 function Boss:load()
     index = -1
-    Boss.positions={}
+    Boss.positions = {}
     Boss.length = 0
     Boss.go = false
     
@@ -22,6 +22,8 @@ function Boss:load()
     Boss.life = 10
     Boss.image = love.graphics.newImage("images/boss.png")
     --Boss.positions={{1,2},{3,4},{5,6},{7,8}}
+
+    self.should_start = false
     
     startMove()
 end
@@ -36,19 +38,23 @@ local function updateBoss(dt)
 end
 
 function Boss:update(dt)
-    updateBoss(dt)
-    if Boss.go == false then
-        startMove()
+    if self.should_start then
+        updateBoss(dt)
+        if Boss.go == false then
+            startMove()
+        end
     end
-    
 end
 
 function Boss:draw()
-    if index >= (Boss.length-1) then
-        -- print("lose")
-        love.graphics.draw(Boss.image,Boss.positions[Boss.length-1][1],Boss.positions[Boss.length-1][2])
+    if self.should_start then
+        if index >= (Boss.length-1) then
+            -- print("lose")
+            love.graphics.draw(Boss.image, Boss.positions[Boss.length-1][1], Boss.positions[Boss.length-1][2])
+        else
+            love.graphics.draw(Boss.image, Boss.positions[index+1][1], Boss.positions[index+1][2])
+        end
     else
-        love.graphics.draw(Boss.image,Boss.positions[index+1][1],Boss.positions[index+1][2])
+        love.graphics.draw(Boss.image, Map.grid[1][1].x, Map.grid[1][1].y)
     end
-    
 end

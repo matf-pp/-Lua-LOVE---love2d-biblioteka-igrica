@@ -19,23 +19,68 @@ local font = nil
 function Menu:load()
     font = love.graphics.newFont(32)
 
-    table.insert(Menu, new_button(
-        "Start Game",
-        function()  --anonimna funkcija
-            print("Starting game")
-        end))
+    table.insert(
+        Menu,
+        new_button(
+            "Start Game",
+            function ()
+                print("Starting game")
+                local path = Map:find_path()
+                
+                local i = 1
+                if next(path) == nil then
+                    print("path not found")
+                else
+                    print("path found:")
+                    for _, value in pairs(path) do
+                        io.write(value.to_string .. " -> ")
+                        table.insert(
+                            Boss.positions,
+                            {
+                                value.x,
+                                value.y
+                            }
+                        )
+                        i = i + 1
+                    end
+                    print("done")
+                    
+                    Boss.length = i
+                end
+                Boss.should_start = true
+            end
+        )
+    )
 
-    table.insert(Menu, new_button(
-        "Load level",
-        function()  --anonimna funkcija
-            print("Pick a level")
-        end))
-            
-    table.insert(Menu, new_button(
-        "Exit",
-        function()  --anonimna funkcija
-            love.event.quit(0)
-        end))
+    table.insert(
+        Menu,
+        new_button(
+            "Reset",
+            function ()
+                print("Resetting level")
+            end
+        )
+    )
+
+    table.insert(
+        Menu,
+        new_button(
+            "Load level",
+            function ()
+                print("Pick a level")
+            end
+        )
+    )
+
+    table.insert(
+        Menu,
+        new_button(
+            "Exit",
+            function()
+                love.event.quit(0)
+            end
+        )
+    )
 end
 
 function Menu:update(dt)
