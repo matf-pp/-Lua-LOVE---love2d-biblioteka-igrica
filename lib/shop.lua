@@ -2,8 +2,6 @@ require("lib.map")
 local level_data = require("levels.test_level_01")
 local shop_data = require("lib.shop_config")
 
-BUTTON_WIDTH = 48
-
 --[[
     Funkcija uzima string text i funkciju fn i pravi table sa podacima o dugmetu, gde je text ime dugmeta, a fn njegova funkcionalnost.
 ]]
@@ -48,11 +46,20 @@ function Shop:load()
             end
         )
     )
+
+    self.buttons.wall = new_button(
+        "wall_button",
+        function ()
+            print("halo, dobar dan")
+        end
+    )
 end
 
 function Shop:update(dt)
     -- TODO
-    if self.buttons[1].select == true and love.mouse.isDown(2) then
+    if self.buttons.wall.select == true and love.mouse.isDown(2) then
+        print("Juhu!")
+        --[[
         local dx, dy =  love.mouse.getPosition()
         if Map:add_wall(dx,dy) == true then 
             print("Uspesno dodat zid na koordinatama ( "..dx.." , "..dy.." )")
@@ -60,18 +67,24 @@ function Shop:update(dt)
         else
             print("Neuspesno dodavanje zida na koordinatama (70, 30)")
         end
+        ]]
     end
 end
 
 function Shop:draw()
+    love.graphics.setColor(0, 1, 0)
+    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+
     love.graphics.setColor(1, 1, 1)
-    --love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+
+    local button_width = 48
+    local button_height = 48
 
     local margin = 16
-    local total_width = (BUTTON_WIDTH + margin) * #self.buttons
+    local total_width = (button_width + margin) * #self.buttons
     local cursor_x = 0
 
-    for _, button in ipairs(self.buttons) do
+    for _, button in pairs(self.buttons) do
         button.last = button.now
 
         local bx = self.x + 50 + cursor_x
@@ -79,8 +92,8 @@ function Shop:draw()
 
         local mx, my = love.mouse.getPosition()
 
-        local hot = mx > bx and mx < bx + 48 and
-                    my > by and my < by + BUTTON_HEIGHT
+        local hot = mx > bx and mx < bx + button_width and
+                    my > by and my < by + button_height
 
         button.now = love.mouse.isDown(1)
         if button.now and not button.last and hot then
@@ -90,7 +103,7 @@ function Shop:draw()
 
         love.graphics.draw(level_data.images.wall_image, bx, by)
 
-        cursor_x = cursor_x + BUTTON_HEIGHT + margin
+        cursor_x = cursor_x + button_width + margin
     end
 
     love.graphics.setColor(1, 1, 1)

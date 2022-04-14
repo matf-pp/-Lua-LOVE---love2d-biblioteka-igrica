@@ -1,4 +1,4 @@
-BUTTON_HEIGHT = 64
+BUTTON_HEIGHT = 48
 
 local function new_button(text, fn)
     --funkcija koja pravi dugme kao povratnu vrednost daje table dugme
@@ -106,12 +106,12 @@ function Menu:draw()
         --x,y koordinate za dugmice
         local bx = (ww*0.9) - (button_width*0.9)
         local by = (wh*0.9) - (total_height*0.9) + cursor_y
+        
         --boja dugmeta
-
         local color = {0.4,0.4,0.5,1.0}
 
         --pozicija kursora
-        local mx,my = love.mouse.getPosition()
+        local mx, my = love.mouse.getPosition()
 
         --za hover preko dugmeta
         local hot = mx > bx and mx < bx + button_width and
