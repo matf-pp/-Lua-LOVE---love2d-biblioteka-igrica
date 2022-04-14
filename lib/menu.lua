@@ -119,21 +119,23 @@ local function exit_function()
     love.event.quit(0)
 end
 
---da li raditi change the scene ili ostati sve na jednom ekranu?
 function Menu:load()
     font = love.graphics.newFont(32)
 
-    self.x = love.graphics.getWidth() * 3 / 5
-    self.y = love.graphics.getHeight() * 3 / 5
-    self.width = love.graphics.getWidth() * 2 / 5
-    self.height = love.graphics.getHeight() * 2 / 5
+    self.x = menu_data.x
+    self.y = menu_data.y
+    self.width = menu_data.width
+    self.height = menu_data.height
+
+    self.bg_image = menu_data.bg_image
+    self.bg_quad = menu_data.bg_quad
     
     self.buttons = {}
     self.num_buttons = 4
-    self.buttons.start = self:new_button("start", start_function, 1)
-    self.buttons.reset = self:new_button("reset", reset_function, 2)
-    self.buttons.load = self:new_button("load", load_function, 3)
-    self.buttons.exit = self:new_button("exit", exit_function, 4)
+    self.buttons.start = self:new_button("Start", start_function, 1)
+    self.buttons.reset = self:new_button("Reset", reset_function, 2)
+    self.buttons.load = self:new_button("Load", load_function, 3)
+    self.buttons.exit = self:new_button("Exit", exit_function, 4)
 end
 
 function Menu:update(dt)
@@ -143,9 +145,9 @@ function Menu:update(dt)
 end
 
 function Menu:draw()
-    -- cratnje glavnog prozora
-    love.graphics.setColor(0.5, 0.2, 0.8)
-    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+    -- crtanje pozadine
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(self.bg_image, self.bg_quad, self.x, self.y)
 
     -- crtanje dugmica
     for _, button in pairs(self.buttons) do
