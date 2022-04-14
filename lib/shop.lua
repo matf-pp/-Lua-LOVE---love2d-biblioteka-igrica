@@ -53,6 +53,82 @@ function Shop:load()
             print("halo, dobar dan")
         end
     )
+
+    self.areas = {}
+
+    self.areas.header = {
+        x = self.x,
+        y = self.y,
+        width = self.width,
+        height = self.height * 1 / 6,
+        color = {0, 0, 1},
+        draw = function (self)
+            love.graphics.setColor(unpack(self.color))
+            love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+
+            love.graphics.setColor(0, 0, 0)
+            local text = "header"
+            local font = love.graphics.getFont()
+            local font_width = font:getWidth(text)
+            local font_height = font:getHeight()
+            love.graphics.print(text, self.x + self.width / 2, self.y + self.height / 2, 0, 1, 1, font_width / 2, font_height / 2)
+        end
+    }
+    self.areas.items = {
+        x = self.x,
+        y = self.y + self.height * 1 / 6,
+        width = self.width * 4 / 5,
+        height = self.height * 1 / 3,
+        color = {0, 0.5, 0.8},
+        draw = function (self)
+            love.graphics.setColor(unpack(self.color))
+            love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+        end
+    }
+    self.areas.currency = {
+        x = self.x + self.width * 4 / 5,
+        y = self.y + self.height * 1 / 6,
+        width = self.width * 1 / 5,
+        height = self.height * 1 / 3,
+        color = {0.8, 0.3, 0.2},
+        draw = function (self)
+            love.graphics.setColor(unpack(self.color))
+            love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+        end
+    }
+    self.areas.selected = {
+        x = self.x,
+        y = self.y + self.height * 1 / 2,
+        width = self.width * 1 / 5,
+        height = self.height * 1 / 3,
+        color = {0.5, 0, 0.5},
+        draw = function (self)
+            love.graphics.setColor(unpack(self.color))
+            love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+        end
+    }
+    self.areas.price = {
+        x = self.x,
+        y = self.y + self.height * 5 / 6,
+        width = self.width * 1 / 5,
+        height = self.height * 1 / 6,
+        color = {0.5, 0.5, 0.5},
+        draw = function (self)
+            love.graphics.setColor(unpack(self.color))
+            love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+        end
+    }
+    self.areas.description = {
+        x = self.x + self.width * 1 / 5,
+        y = self.y + self.height * 1 / 2,
+        width = self.width * 4 / 5,
+        height = self.height * 1 / 2,
+        color = {0.3, 0.7, 0.4},
+        draw = function (self)
+            love.graphics.setColor(unpack(self.color))
+            love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+        end
+    }
 end
 
 function Shop:update(dt)
@@ -72,8 +148,8 @@ function Shop:update(dt)
 end
 
 function Shop:draw()
-    love.graphics.setColor(0, 1, 0)
-    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+    --love.graphics.setColor(0, 1, 0)
+    --love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 
     love.graphics.setColor(1, 1, 1)
 
@@ -109,4 +185,8 @@ function Shop:draw()
     love.graphics.setColor(1, 1, 1)
     love.graphics.setFont(self.shop_font)
     love.graphics.print("Shop", self.x + 5, self.y + 5)
+
+    for _, area in pairs(self.areas) do
+        area:draw()
+    end
 end
