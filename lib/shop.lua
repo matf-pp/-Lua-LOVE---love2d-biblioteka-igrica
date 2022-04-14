@@ -83,6 +83,37 @@ function Shop:load()
         draw = function (self)
             love.graphics.setColor(unpack(self.color))
             love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+
+            love.graphics.setColor(1, 1, 1)
+
+            local button_width = 48
+            local button_height = 48
+
+            local margin = 16
+            -- local total_width = (button_width + margin) * #Shop.buttons
+            local cursor_x = 0
+
+            for _, button in pairs(Shop.buttons) do
+                button.last = button.now
+
+                local bx = self.x + margin + button_width / 2 + cursor_x
+                local by = self.y + self.height / 2
+
+                local mx, my = love.mouse.getPosition()
+
+                local hot = mx > bx - button_width / 2 and mx < bx + button_width / 2 and
+                            my > by - button_height / 2 and my < by + button_height / 2
+
+                button.now = love.mouse.isDown(1)
+                if button.now and not button.last and hot then
+                    button.fn()
+                    button.select = true
+                end
+
+                love.graphics.draw(level_data.images.wall_image, bx, by, 0, 1, 1, button_width / 2, button_height / 2)
+
+                cursor_x = cursor_x + button_width + margin
+            end
         end
     }
     self.areas.currency = {
@@ -151,40 +182,11 @@ function Shop:draw()
     --love.graphics.setColor(0, 1, 0)
     --love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 
-    love.graphics.setColor(1, 1, 1)
-
-    local button_width = 48
-    local button_height = 48
-
-    local margin = 16
-    local total_width = (button_width + margin) * #self.buttons
-    local cursor_x = 0
-
-    for _, button in pairs(self.buttons) do
-        button.last = button.now
-
-        local bx = self.x + 50 + cursor_x
-        local by = self.y + 50
-
-        local mx, my = love.mouse.getPosition()
-
-        local hot = mx > bx and mx < bx + button_width and
-                    my > by and my < by + button_height
-
-        button.now = love.mouse.isDown(1)
-        if button.now and not button.last and hot then
-            button.fn()
-            button.select = true
-        end
-
-        love.graphics.draw(level_data.images.wall_image, bx, by)
-
-        cursor_x = cursor_x + button_width + margin
-    end
-
+    --[[
     love.graphics.setColor(1, 1, 1)
     love.graphics.setFont(self.shop_font)
     love.graphics.print("Shop", self.x + 5, self.y + 5)
+    ]]
 
     for _, area in pairs(self.areas) do
         area:draw()
