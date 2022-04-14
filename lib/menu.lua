@@ -5,7 +5,6 @@ local function new_button(text, fn)
     return {
         text = text,
         fn = fn,
-        
         --da se registruje klik na dugmetu samo jednom
         now = false,
         last = false
@@ -44,10 +43,10 @@ function Menu:load()
                         i = i + 1
                     end
                     print("done")
-                    
+
                     Boss.length = i
+                    Boss.should_start = true
                 end
-                Boss.should_start = true
             end
         )
     )
