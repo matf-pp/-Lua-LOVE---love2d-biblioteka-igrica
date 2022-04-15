@@ -61,13 +61,19 @@ function Shop:load()
         y = self.y,
         width = self.width,
         height = self.height * 1 / 6,
-        color = {0, 0, 1},
+        color = {1, 1, 1},
         draw = function (self)
             love.graphics.setColor(unpack(self.color))
-            love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+            --love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+            
+            local bg_image = love.graphics.newImage("images/wall2.png")
+            bg_image:setWrap("repeat", "repeat")
+            local bg_quad = love.graphics.newQuad(0, 0, self.width, self.height, 48, self.height)
 
-            love.graphics.setColor(0, 0, 0)
-            local text = "header"
+            love.graphics.draw(bg_image, bg_quad, self.x, self.y, 0, 1, 1)
+
+            love.graphics.setColor(1, 1, 0.5, 0.6)
+            local text = "Shop"
             local font = love.graphics.getFont()
             local font_width = font:getWidth(text)
             local font_height = font:getHeight()
@@ -79,7 +85,7 @@ function Shop:load()
         y = self.y + self.height * 1 / 6,
         width = self.width * 4 / 5,
         height = self.height * 1 / 3,
-        color = {0, 0.5, 0.8},
+        color = {71/255, 74/255, 252/255},
         draw = function (self)
             love.graphics.setColor(unpack(self.color))
             love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
@@ -121,7 +127,7 @@ function Shop:load()
         y = self.y + self.height * 1 / 6,
         width = self.width * 1 / 5,
         height = self.height * 1 / 3,
-        color = {0.8, 0.3, 0.2},
+        color = {57/255, 60/255, 227/255},
         draw = function (self)
             love.graphics.setColor(unpack(self.color))
             love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
@@ -132,7 +138,7 @@ function Shop:load()
         y = self.y + self.height * 1 / 2,
         width = self.width * 1 / 5,
         height = self.height * 1 / 3,
-        color = {0.5, 0, 0.5},
+        color = {57/255, 60/255, 227/255},
         draw = function (self)
             love.graphics.setColor(unpack(self.color))
             love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
@@ -143,7 +149,7 @@ function Shop:load()
         y = self.y + self.height * 5 / 6,
         width = self.width * 1 / 5,
         height = self.height * 1 / 6,
-        color = {0.5, 0.5, 0.5},
+        color = {44/255, 50/255, 201/255},
         draw = function (self)
             love.graphics.setColor(unpack(self.color))
             love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
@@ -154,7 +160,7 @@ function Shop:load()
         y = self.y + self.height * 1 / 2,
         width = self.width * 4 / 5,
         height = self.height * 1 / 2,
-        color = {0.3, 0.7, 0.4},
+        color = {50/255, 55/255, 227/255},
         draw = function (self)
             love.graphics.setColor(unpack(self.color))
             love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
@@ -181,12 +187,8 @@ end
 function Shop:draw()
     --love.graphics.setColor(0, 1, 0)
     --love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
-
-    --[[
     love.graphics.setColor(1, 1, 1)
     love.graphics.setFont(self.shop_font)
-    love.graphics.print("Shop", self.x + 5, self.y + 5)
-    ]]
 
     for _, area in pairs(self.areas) do
         area:draw()

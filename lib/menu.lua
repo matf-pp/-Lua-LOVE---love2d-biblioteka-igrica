@@ -126,9 +126,6 @@ function Menu:load()
     self.y = menu_data.y
     self.width = menu_data.width
     self.height = menu_data.height
-
-    self.bg_image = menu_data.bg_image
-    self.bg_quad = menu_data.bg_quad
     
     self.buttons = {}
     self.num_buttons = 4
@@ -146,8 +143,12 @@ end
 
 function Menu:draw()
     -- crtanje pozadine
+    local bg_image = love.graphics.newImage("images/wall2.png")
+    bg_image:setWrap("repeat", "repeat")
+    local bg_quad = love.graphics.newQuad(0, 0, self.width, self.height, 48, 48)
+
     love.graphics.setColor(1, 1, 1)
-    love.graphics.draw(self.bg_image, self.bg_quad, self.x, self.y)
+    love.graphics.draw(bg_image, bg_quad, self.x, self.y, 0, 1, 1)
 
     -- crtanje dugmica
     for _, button in pairs(self.buttons) do
