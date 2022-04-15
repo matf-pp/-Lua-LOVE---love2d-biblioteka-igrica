@@ -1,8 +1,8 @@
-local start_image = love.graphics.newImage("images/start.png")
-local end_image = love.graphics.newImage("images/start.png")
-local path_image = love.graphics.newImage("images/path.png")
-local wall_image = love.graphics.newImage("images/wall.png")
-local spikes_image = love.graphics.newImage("images/spikes.png")
+local start_image = love.graphics.newImage("images/floor_1.png")
+local end_image = love.graphics.newImage("images/floor_ladder.png")
+local path_image = love.graphics.newImage("images/floor_1.png")
+local wall_image = love.graphics.newImage("images/wall2.png")
+local spikes_image = love.graphics.newImage("images/floor_spikes_anim_f3.png")
 
 local image_scale_factor = 1
 

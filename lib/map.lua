@@ -74,6 +74,12 @@ function Map:load()
             field.image = level_data.images.path_image
             field.quad = love.graphics.newQuad(0, 0, 48, 48, 48, 48)
             field.scale_factor = level_data.image_scale_factor
+            field.clock = 0
+
+            function field:update(dt)
+                self.clock = self.clock + dt
+                self:update_image(dt)
+            end
 
             function field:update_image(dt)
                 if self.is_start then
@@ -83,7 +89,23 @@ function Map:load()
                 elseif self.has_wall then
                     self.image = level_data.images.wall_image
                 elseif self.has_spikes then
-                    self.image = level_data.images.spikes_image
+                    if self.clock >= 0 and self.clock < 0.05 then
+                        self.image = level_data.images.spikes_image_0
+                    elseif self.clock >= 0.05 and self.clock < 0.1 then
+                        self.image = level_data.images.spikes_image_1
+                    elseif self.clock >= 0.1 and self.clock < 0.15 then
+                        self.image = level_data.images.spikes_image_2
+                    elseif self.clock >= 0.15 and self.clock < 1.5 then
+                        self.image = level_data.images.spikes_image_3
+                    elseif self.clock >= 1.5 and self.clock < 1.6 then
+                        self.image = level_data.images.spikes_image_2
+                    elseif self.clock >= 1.6 and self.clock < 1.7 then
+                        self.image = level_data.images.spikes_image_1
+                    elseif self.clock >= 1.7 and self.clock < 1.9 then
+                        self.image = level_data.images.spikes_image_0
+                    else
+                        self.clock = 0
+                    end
                 else
                     self.image = level_data.images.path_image
                 end
@@ -103,7 +125,7 @@ end
 function Map:update(dt)
     for _, row in pairs(self.grid) do
         for _, field in pairs(row) do
-            field:update_image(dt)
+            field:update(dt)
         end
     end
 end
@@ -186,11 +208,12 @@ function Map:add_wall(x, y)
 
     local field = self.grid[i][j]
 
-    if field.is_start or field.is_end or field.has_wall then
+    if field.is_start or field.is_end or field.has_wall or field.has_spikes then
         return false
     end
 
     self.grid[i][j].has_wall = true
+    print("Uspesno dodat zid na koordinatama ( "..dx.." , "..dy.." )")
 
     return true
 end
@@ -331,7 +354,7 @@ function Map:all_paths(start, finish)
     local paths = {}
     
     for _, neighbor in pairs(start.neighbors) do
-        if neighbor.visited == false then
+        if neighbor.visited == false and neighbor.has_wall == false then
             local neighbor_paths = self:all_paths(neighbor, finish)
             for _, neighbor_path in pairs(neighbor_paths) do
                 table.insert(neighbor_path.nodes, start)

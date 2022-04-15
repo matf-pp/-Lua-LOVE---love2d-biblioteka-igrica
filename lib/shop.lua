@@ -1,19 +1,6 @@
 require("lib.map")
-local level_data = require("levels.test_level_01")
+local level_data = require("levels.test_level_04")
 local shop_data = require("lib.shop_config")
-
---[[
-    Funkcija uzima string text i funkciju fn i pravi table sa podacima o dugmetu, gde je text ime dugmeta, a fn njegova funkcionalnost.
-]]
-local function new_button(text, fn)
-    return {
-        text = text,
-        fn = fn,
-        select = false,
-        now = false,
-        last = false
-    }
-end
 
 Shop = {}
 
@@ -27,32 +14,15 @@ function Shop:load()
     -- dugmici u shop-u
     self.buttons = {}
 
-    table.insert(
-        self.buttons,
-        new_button(
-            "wall_button",
-            function()
-                print("uspesno pritisnuto wall dugme")
-            end
-        )
-    )
+    self.buttons.wall = {
+        selected = false,
+        now = false,
+        last = false
+    }
 
-    table.insert(
-        self.buttons,
-        new_button(
-            "spike_button",
-            function()
-                print("uspesno pritisnuto spike dugme")
-            end
-        )
-    )
-
-    self.buttons.wall = new_button(
-        "wall_button",
-        function ()
-            print("halo, dobar dan")
-        end
-    )
+    function self.buttons.wall:on_press()
+        self.selected = true
+    end
 
     self.areas = {}
 
@@ -86,14 +56,13 @@ function Shop:load()
         width = self.width * 4 / 5,
         height = self.height * 1 / 3,
         color = {71/255, 74/255, 252/255},
+        button_width = 48,
+        button_height = 48,
         draw = function (self)
             love.graphics.setColor(unpack(self.color))
             love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 
             love.graphics.setColor(1, 1, 1)
-
-            local button_width = 48
-            local button_height = 48
 
             local margin = 16
             -- local total_width = (button_width + margin) * #Shop.buttons
@@ -102,23 +71,23 @@ function Shop:load()
             for _, button in pairs(Shop.buttons) do
                 button.last = button.now
 
-                local bx = self.x + margin + button_width / 2 + cursor_x
+                local bx = self.x + margin + self.button_width / 2 + cursor_x
                 local by = self.y + self.height / 2
 
                 local mx, my = love.mouse.getPosition()
 
-                local hot = mx > bx - button_width / 2 and mx < bx + button_width / 2 and
-                            my > by - button_height / 2 and my < by + button_height / 2
+                local hot = mx > bx - self.button_width / 2 and mx < bx + self.button_width / 2 and
+                            my > by - self.button_height / 2 and my < by + self.button_height / 2
 
                 button.now = love.mouse.isDown(1)
                 if button.now and not button.last and hot then
-                    button.fn()
-                    button.select = true
+                    button:on_press()
                 end
 
-                love.graphics.draw(level_data.images.wall_image, bx, by, 0, 1, 1, button_width / 2, button_height / 2)
+                local quad = love.graphics.newQuad(0, 0, 48, 48, self.button_width, self.button_height)
+                love.graphics.draw(level_data.images.wall_image, quad, bx, by, 0, 1, 1, self.button_width / 2, self.button_height / 2)
 
-                cursor_x = cursor_x + button_width + margin
+                cursor_x = cursor_x + self.button_width + margin
             end
         end
     }
@@ -170,23 +139,14 @@ end
 
 function Shop:update(dt)
     -- TODO
-    if self.buttons.wall.select == true and love.mouse.isDown(2) then
-        print("Juhu!")
-        --[[
+    if self.buttons.wall.selected == true and love.mouse.isDown(2) then
         local dx, dy =  love.mouse.getPosition()
-        if Map:add_wall(dx,dy) == true then 
-            print("Uspesno dodat zid na koordinatama ( "..dx.." , "..dy.." )")
-            self.buttons[1].select = false
-        else
-            print("Neuspesno dodavanje zida na koordinatama (70, 30)")
-        end
-        ]]
+        Map:add_wall(dx,dy)
+        self.buttons.wall.selected = false
     end
 end
 
 function Shop:draw()
-    --love.graphics.setColor(0, 1, 0)
-    --love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
     love.graphics.setColor(1, 1, 1)
     love.graphics.setFont(self.shop_font)
 
