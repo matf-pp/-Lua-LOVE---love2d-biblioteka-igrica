@@ -22,13 +22,6 @@ function Boss:start_move()
     index = index + 1
 end
 
-function Boss:update_state(dt)
-    self.state = "idle"
-    if self.should_start then
-        self.state = "run"
-    end
-end
-
 function Boss:load()
     index = -1
     self.positions = {}
@@ -38,9 +31,7 @@ function Boss:load()
     self.timer = 0
     self.image = boss_idle_0
 
-    self.should_start = false
-
-    self.state = "idle"
+    self.phase = "idle"
     self.position = {
         x = Map.start_field.x,
         y = Map.start_field.y
@@ -52,7 +43,7 @@ end
 
 function Boss:update_image(dt)
     self.clock = self.clock + dt
-    if self.state == "idle" then
+    if self.phase == "idle" then
         if self.clock >= 0 and self.clock < 0.25 then
             self.image = boss_idle_0
         elseif self.clock >= 0.25 and self.clock < 0.5 then
@@ -65,7 +56,7 @@ function Boss:update_image(dt)
             self.clock = 0
         end
     end
-    if self.state == "run" then
+    if self.phase == "run" then
         if self.clock >= 0 and self.clock < 0.15 then
             self.image = boss_run_0
         elseif self.clock >= 0.15 and self.clock < 0.3 then
@@ -80,12 +71,8 @@ function Boss:update_image(dt)
     end
 end
 
-function Boss:update(dt)
-    self:update_image(dt)
-    
-    self:update_state(dt)
-
-    if self.should_start and self.go then
+function Boss:update_position(dt)
+    if self.phase == "run" and self.go then
         self.timer = self.timer + dt
         if self.timer > 0.5 then
             self.go = false
@@ -93,21 +80,23 @@ function Boss:update(dt)
         end
     end
 
-    if self.should_start then
+    if self.phase == "run" then
         if index >= (self.length-1) then
             -- lose
             self.position.x = self.positions[self.length-1][1]
             self.position.y = self.positions[self.length-1][2]
 
-            self.state = "idle"
+            self.phase = "idle"
         else
             self.position.x = self.positions[index+1][1]
             self.position.y = self.positions[index+1][2]
         end
-    else
-        self.position.x = Map.grid[1][1].x
-        self.position.y = Map.grid[1][1].y
     end
+end
+
+function Boss:update(dt)
+    self:update_position(dt)
+    self:update_image(dt)
 end
 
 function Boss:draw()

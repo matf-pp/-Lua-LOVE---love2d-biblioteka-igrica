@@ -103,19 +103,22 @@ local function start_function()
         print("done")
 
         Boss.length = length
-        Boss.should_start = true
+        Boss.phase = "run"
     end
 end
 
 local function reset_function()
+    -- TODO
     print("Resetting level")
 end
 
 local function load_function()
+    -- TODO
     print("Pick a level")
 end
 
 local function exit_function()
+    -- TODO: implementirati popup koji ce da proveri sa korisnikom da li hoce zaista da izadje
     love.event.quit(0)
 end
 
