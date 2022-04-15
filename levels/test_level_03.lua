@@ -4,6 +4,8 @@ local path_image = love.graphics.newImage("images/path.png")
 local wall_image = love.graphics.newImage("images/wall.png")
 local spikes_image = love.graphics.newImage("images/spikes.png")
 
+local image_scale_factor = 1
+
 return {
     data = {
         1,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
@@ -27,5 +29,7 @@ return {
     wall_id = 4,
     start_id = 1,
     end_id = 2,
-    spikes_id = 5
+    spikes_id = 5,
+
+    image_scale_factor = image_scale_factor
 }

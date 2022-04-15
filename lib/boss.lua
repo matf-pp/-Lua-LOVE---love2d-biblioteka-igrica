@@ -1,60 +1,115 @@
 require("lib.map")
 require("lib.map_config")
 
+love.graphics.setDefaultFilter("nearest", "nearest")
+local boss_idle_0 = love.graphics.newImage("images/chort_idle_anim_f0.png")
+local boss_idle_1 = love.graphics.newImage("images/chort_idle_anim_f1.png")
+local boss_idle_2 = love.graphics.newImage("images/chort_idle_anim_f2.png")
+local boss_idle_3 = love.graphics.newImage("images/chort_idle_anim_f3.png")
+local boss_run_0 = love.graphics.newImage("images/chort_run_anim_f0.png")
+local boss_run_1 = love.graphics.newImage("images/chort_run_anim_f1.png")
+local boss_run_2 = love.graphics.newImage("images/chort_run_anim_f2.png")
+local boss_run_3 = love.graphics.newImage("images/chort_run_anim_f3.png")
+local quad = love.graphics.newQuad(0, 0, 16, 24, 16, 24)
+
 local index
 
 Boss = {}
 
-local function startMove()
-    Boss.timer = 0
-    Boss.go = true
+function Boss:start_move()
+    self.timer = 0
+    self.go = true
     index = index + 1
-    -- print(index)
+end
+
+function Boss:update_state(dt)
+    self.state = "idle"
+    if self.should_start then
+        self.state = "run"
+    end
 end
 
 function Boss:load()
     index = -1
-    Boss.positions = {}
-    Boss.length = 0
-    Boss.go = false
+    self.positions = {}
+    self.length = 0
+    self.go = false
     
-    Boss.timer = 0
-    Boss.life = 10
-    Boss.image = love.graphics.newImage("images/boss.png")
-    --Boss.positions={{1,2},{3,4},{5,6},{7,8}}
+    self.timer = 0
+    self.image = boss_idle_0
 
     self.should_start = false
+
+    self.state = "idle"
+    self.position = {
+        x = Map.start_field.x,
+        y = Map.start_field.y
+    }
+    self.clock = 0
     
-    startMove()
+    self:start_move()
 end
 
-local function updateBoss(dt)
-    if Boss.go then
-        Boss.timer = Boss.timer + dt
-        if Boss.timer > 0.5 then
-            Boss.go = false
+function Boss:update_image(dt)
+    self.clock = self.clock + dt
+    if self.state == "idle" then
+        if self.clock >= 0 and self.clock < 0.25 then
+            self.image = boss_idle_0
+        elseif self.clock >= 0.25 and self.clock < 0.5 then
+            self.image = boss_idle_1
+        elseif self.clock >= 0.5 and self.clock < 0.75 then
+            self.image = boss_idle_2
+        elseif self.clock >= 0.75 and self.clock < 1 then
+            self.image = boss_idle_3
+        else
+            self.clock = 0
+        end
+    end
+    if self.state == "run" then
+        if self.clock >= 0 and self.clock < 0.15 then
+            self.image = boss_run_0
+        elseif self.clock >= 0.15 and self.clock < 0.3 then
+            self.image = boss_run_1
+        elseif self.clock >= 0.3 and self.clock < 0.45 then
+            self.image = boss_run_2
+        elseif self.clock >= 0.45 and self.clock < 0.6 then
+            self.image = boss_run_3
+        else
+            self.clock = 0
         end
     end
 end
 
 function Boss:update(dt)
-    if self.should_start then
-        updateBoss(dt)
-        if Boss.go == false then
-            startMove()
+    self:update_image(dt)
+    
+    self:update_state(dt)
+
+    if self.should_start and self.go then
+        self.timer = self.timer + dt
+        if self.timer > 0.5 then
+            self.go = false
+            self:start_move()
         end
+    end
+
+    if self.should_start then
+        if index >= (self.length-1) then
+            -- lose
+            self.position.x = self.positions[self.length-1][1]
+            self.position.y = self.positions[self.length-1][2]
+
+            self.state = "idle"
+        else
+            self.position.x = self.positions[index+1][1]
+            self.position.y = self.positions[index+1][2]
+        end
+    else
+        self.position.x = Map.grid[1][1].x
+        self.position.y = Map.grid[1][1].y
     end
 end
 
 function Boss:draw()
-    if self.should_start then
-        if index >= (Boss.length-1) then
-            -- print("lose")
-            love.graphics.draw(Boss.image, Boss.positions[Boss.length-1][1], Boss.positions[Boss.length-1][2])
-        else
-            love.graphics.draw(Boss.image, Boss.positions[index+1][1], Boss.positions[index+1][2])
-        end
-    else
-        love.graphics.draw(Boss.image, Map.grid[1][1].x, Map.grid[1][1].y)
-    end
+    love.graphics.draw(self.image, quad, self.position.x, self.position.y - 24, 0, 3, 3)
 end

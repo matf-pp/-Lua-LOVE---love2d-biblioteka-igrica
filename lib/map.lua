@@ -1,4 +1,4 @@
-local level_data = require("levels.test_level_01")
+local level_data = require("levels.test_level_04")
 local map_data = require("lib.map_config")
 
 Map = {}
@@ -71,21 +71,27 @@ function Map:load()
             -- grafika polja
             field.x = self.grid_x + (field.column - 1) * self.field_side
             field.y = self.grid_y + (field.row - 1) * self.field_side
+            field.image = level_data.images.path_image
+            field.quad = love.graphics.newQuad(0, 0, 48, 48, 48, 48)
+            field.scale_factor = level_data.image_scale_factor
+
+            function field:update_image(dt)
+                if self.is_start then
+                    self.image = level_data.images.start_image
+                elseif self.is_end then
+                    self.image = level_data.images.end_image
+                elseif self.has_wall then
+                    self.image = level_data.images.wall_image
+                elseif self.has_spikes then
+                    self.image = level_data.images.spikes_image
+                else
+                    self.image = level_data.images.path_image
+                end
+            end
 
             function field:draw()
                 love.graphics.setColor(1, 1, 1)
-
-                if self.is_start then
-                    love.graphics.draw(level_data.images.start_image, self.x, self.y)
-                elseif self.is_end then
-                    love.graphics.draw(level_data.images.end_image, self.x, self.y)
-                elseif self.has_wall then
-                    love.graphics.draw(level_data.images.wall_image, self.x, self.y)
-                elseif self.has_spikes then
-                    --
-                else
-                    love.graphics.draw(level_data.images.path_image, self.x, self.y)
-                end
+                love.graphics.draw(self.image, self.quad, self.x, self.y, 0, self.scale_factor, self.scale_factor)
             end
         end
     end
@@ -95,7 +101,11 @@ function Map:load()
 end
 
 function Map:update(dt)
-    --
+    for _, row in pairs(self.grid) do
+        for _, field in pairs(row) do
+            field:update_image(dt)
+        end
+    end
 end
 
 function Map:draw()

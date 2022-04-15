@@ -84,10 +84,10 @@ local function start_function()
     print("Starting game")
     local path = Map:find_path()
     
-    local i = 1
     if next(path) == nil then
         print("path not found")
     else
+        local length = 1
         print("path found:")
         for _, value in pairs(path) do
             io.write(value.to_string .. " -> ")
@@ -98,11 +98,11 @@ local function start_function()
                     value.y
                 }
             )
-            i = i + 1
+            length = length + 1
         end
         print("done")
 
-        Boss.length = i
+        Boss.length = length
         Boss.should_start = true
     end
 end

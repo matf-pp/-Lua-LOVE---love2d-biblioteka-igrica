@@ -3,6 +3,8 @@ local end_image = love.graphics.newImage("images/start.png")
 local path_image = love.graphics.newImage("images/path.png")
 local wall_image = love.graphics.newImage("images/wall.png")
 
+local image_scale_factor = 1
+
 return {
     data = {
         1,3,3,3,3,3,3,3,3,3,4,4,4,3,3,3,3,3,3,3,
@@ -24,5 +26,7 @@ return {
     path_id = 3,
     wall_id = 4,
     start_id = 1,
-    end_id = 2
+    end_id = 2,
+    
+    image_scale_factor = image_scale_factor
 }
