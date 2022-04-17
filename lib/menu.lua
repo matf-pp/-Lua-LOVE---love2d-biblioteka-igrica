@@ -110,7 +110,10 @@ end
 
 local function reset_function()
     -- TODO
-    print("Resetting level")
+    if Boss.phase == "idle" then
+        print("Resetting level")
+        love.load()
+    end
 end
 
 local function load_function()
