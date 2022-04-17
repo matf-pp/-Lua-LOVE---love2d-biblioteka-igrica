@@ -101,7 +101,6 @@ local function start_function()
             length = length + 1
         end
         print("done")
-        print(path.life_cost)
 
         Boss.length = length
         Boss.phase = "run"
@@ -109,7 +108,6 @@ local function start_function()
 end
 
 local function reset_function()
-    -- TODO
     print("Resetting level")
     love.load()
 end

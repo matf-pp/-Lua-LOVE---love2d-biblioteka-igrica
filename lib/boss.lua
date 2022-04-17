@@ -1,16 +1,14 @@
-require("lib.map")
-require("lib.map_config")
+local boss_images = require("lib.level_data").images.boss
 
-love.graphics.setDefaultFilter("nearest", "nearest")
-local boss_idle_0 = love.graphics.newImage("images/chort_idle_anim_f0.png")
-local boss_idle_1 = love.graphics.newImage("images/chort_idle_anim_f1.png")
-local boss_idle_2 = love.graphics.newImage("images/chort_idle_anim_f2.png")
-local boss_idle_3 = love.graphics.newImage("images/chort_idle_anim_f3.png")
-local boss_run_0 = love.graphics.newImage("images/chort_run_anim_f0.png")
-local boss_run_1 = love.graphics.newImage("images/chort_run_anim_f1.png")
-local boss_run_2 = love.graphics.newImage("images/chort_run_anim_f2.png")
-local boss_run_3 = love.graphics.newImage("images/chort_run_anim_f3.png")
-local quad = love.graphics.newQuad(0, 0, 16, 24, 16, 24)
+local boss_idle_0 = boss_images.boss_idle_0
+local boss_idle_1 = boss_images.boss_idle_1
+local boss_idle_2 = boss_images.boss_idle_2
+local boss_idle_3 = boss_images.boss_idle_3
+local boss_run_0 = boss_images.boss_run_0
+local boss_run_1 = boss_images.boss_run_1
+local boss_run_2 = boss_images.boss_run_2
+local boss_run_3 = boss_images.boss_run_3
+local quad = love.graphics.newQuad(0, 0, boss_idle_0:getWidth(), boss_idle_0:getHeight(), boss_idle_0:getWidth(), boss_idle_0:getHeight())
 
 local index
 
@@ -82,7 +80,6 @@ function Boss:update_position(dt)
 
     if self.phase == "run" then
         if index >= (self.length-1) then
-            -- lose
             self.position.x = self.positions[self.length-1][1]
             self.position.y = self.positions[self.length-1][2]
 
@@ -100,5 +97,5 @@ function Boss:update(dt)
 end
 
 function Boss:draw()
-    love.graphics.draw(self.image, quad, self.position.x, self.position.y - 24, 0, 3, 3)
+    love.graphics.draw(self.image, quad, self.position.x, self.position.y , 0, 3, 3)
 end

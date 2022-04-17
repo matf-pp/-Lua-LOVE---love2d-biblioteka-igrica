@@ -47,21 +47,21 @@ function Map:load()
             field.is_end = false
             field.has_spikes = false
 
-            if level_data.data[k] == level_data.wall_id then
+            if level_data.grid_data[k] == level_data.wall_id then
                 field.has_wall = true
             end
 
-            if level_data.data[k] == level_data.start_id then
+            if level_data.grid_data[k] == level_data.start_id then
                 field.is_start = true
                 self.start_field = field
             end
 
-            if level_data.data[k] == level_data.end_id then
+            if level_data.grid_data[k] == level_data.end_id then
                 field.is_end = true
                 self.end_field = field
             end
 
-            if level_data.data[k] == level_data.spikes_id then
+            if level_data.grid_data[k] == level_data.spikes_id then
                 field.has_spikes = true
                 field.damage = field.damage + 1
             end
@@ -264,93 +264,6 @@ function Map:find_path()
     end
 
     return result
-end
-
-function Map:find_path_2(start, finish)
-    Queue = {}
-
-    function Queue.new()
-      return {first = 0, last = -1}
-    end
-    
-    function Queue.push(queue, value)
-      local last = queue.last + 1
-      queue.last = last
-      queue[last] = value
-    end
-    
-    function Queue.pop(queue)
-      local first = queue.first
-      if first > queue.last then error("queue is empty") end
-      local value = queue[first]
-      queue[first] = nil
-      queue.first = first + 1
-      return value
-    end
-
-    function Queue.is_empty(queue)
-        if queue.first > queue.last then
-            return true
-        end
-        return false
-    end
-
-    function Queue.contains(queue, value)
-        for _, v in pairs(queue) do
-            if v == value then
-                return true
-            end
-        end
-        return false
-    end
-
-    local queue = Queue.new()
-
-    start.distance = 0
-    Queue.push(queue, start)
-
-    while Queue.is_empty(queue) == false do
-        local current = Queue.pop(queue)
-        local distance = current.distance
-        current.visited = true
-        
-        for _, neighbor in pairs(current.neighbors) do
-            if neighbor.visited == false and Queue.contains(queue, neighbor) == false then
-                if neighbor.previous == nil then
-                    neighbor.distance = distance + 1
-                    neighbor.previous = current
-                elseif neighbor.distance > distance + 1 then
-                    neighbor.distance = distance + 1
-                    neighbor.previous = current
-                end
-                Queue.push(queue, neighbor)
-            end
-        end
-    end
-
-    local result = {}
-    local current = finish
-    if current.previous ~= nil then
-        while current.previous ~= nil do
-            table.insert(result, current)
-            current = current.previous
-        end
-        table.insert(result, start)
-    end
-
-    for i = 1, self.m, 1 do
-        for j = 1, self.n, 1 do
-            self.grid[i][j].visited = false
-            self.grid[i][j].distance = -1
-            self.grid[i][j].previous = nil
-        end
-    end
-
-    local result_reverse = {}
-    for i = #result, 1, -1 do
-        table.insert(result_reverse, result[i])
-    end
-    return result_reverse
 end
 
 function Map:all_paths(start, finish)

@@ -1,12 +1,11 @@
 Shop_currency = require("lib.shop_config").currency_settings
 
 function Shop_currency:load()
-    -- TODO
-    self.available = 10
+    self.available = require("lib.level_data").shop.starting_money
 end
 
 function Shop_currency:update(dt)
-    -- TODO
+    --
 end
 
 function Shop_currency:draw()
