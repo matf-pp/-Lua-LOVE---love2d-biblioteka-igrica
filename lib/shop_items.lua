@@ -3,13 +3,14 @@ local level_data = require("lib.shop_config").level_data
 
 function Shop_items:load()
     self.buttons = {}
-    self.selected_item = "none"
+    self.selected_item = {}
 
     self.buttons.wall = {
         selected = false,
         now = false,
         last = false,
-        image = level_data.images.wall_image
+        image = level_data.images.wall_image,
+        cost = 3
     }
 
     function self.buttons.wall:on_press()
@@ -17,14 +18,15 @@ function Shop_items:load()
             button.selected = false
         end
         self.selected = true
-        Shop.selected_item = "wall"
+        Shop_items.selected_item = self
     end
 
     self.buttons.spikes = {
         selected = false,
         now = false,
         last = false,
-        image = level_data.images.spikes_image_3
+        image = level_data.images.spikes_image_3,
+        cost = 1
     }
 
     function self.buttons.spikes:on_press()
@@ -32,20 +34,37 @@ function Shop_items:load()
             button.selected = false
         end
         self.selected = true
-        Shop.selected_item = "spikes"
+        Shop_items.selected_item = self
+    end
+
+    for _, button in pairs(self.buttons) do
+        function button:pay()
+            local new_balance = Shop.areas.currency.available - self.cost
+            if new_balance < 0 then
+                print("no can do, sir")
+                return false
+            else
+                Shop.areas.currency.available = new_balance
+                return true
+            end
+        end
     end
 end
 
 function Shop_items:update(dt)
     if self.buttons.wall.selected == true and love.mouse.isDown(2) then
         local dx, dy =  love.mouse.getPosition()
-        Map:add_wall(dx, dy)
+        if self.buttons.wall:pay() == true then
+            Map:add_wall(dx, dy)
+        end
         self.buttons.wall.selected = false
     end
 
     if self.buttons.spikes.selected == true and love.mouse.isDown(2) then
         local dx, dy =  love.mouse.getPosition()
-        Map:add_spikes(dx, dy)
+        if self.buttons.spikes:pay() == true then
+            Map:add_spikes(dx, dy)
+        end
         self.buttons.spikes.selected = false
     end
 end

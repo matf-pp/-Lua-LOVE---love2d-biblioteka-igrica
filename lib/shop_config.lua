@@ -52,63 +52,63 @@ local items_settings = {
 }
 
 -- podesavanja za deo Shop-a u kom se prikazuje koliko igrac trenutno ima para
-local cur_x = x + width * 4 / 5
-local cur_y = y + height * 1 / 6
-local cur_width = width * 1 / 5
-local cur_height = height * 1 / 3
-local cur_color = {57/255, 60/255, 227/255}
+local currency_x = x + width * 4 / 5
+local currency_y = y + height * 1 / 6
+local currency_width = width * 1 / 5
+local currency_height = height * 1 / 3
+local currency_color = {57/255, 60/255, 227/255}
 
 local currency_settings = {
-    x = cur_x,
-    y = cur_y,
-    width = cur_width,
-    height = cur_height,
-    color = cur_color
+    x = currency_x,
+    y = currency_y,
+    width = currency_width,
+    height = currency_height,
+    color = currency_color
 }
 
 -- podesavanja za deo Shop-a u kom se prikazuje slicica trenutno selektovanog item-a (odn. dugmeta)
-local ii_x = x
-local ii_y = y + height * 1 / 2
-local ii_width = width * 1 / 5
-local ii_height = height * 1 / 3
-local ii_color = {57/255, 60/255, 227/255}
+local item_image_x = x
+local item_image_y = y + height * 1 / 2
+local item_image_width = width * 1 / 5
+local item_image_height = height * 1 / 3
+local item_image_color = {57/255, 60/255, 227/255}
 
 local item_image_settings = {
-    x = ii_x,
-    y = ii_y,
-    width = ii_width,
-    height = ii_height,
-    color = ii_color
+    x = item_image_x,
+    y = item_image_y,
+    width = item_image_width,
+    height = item_image_height,
+    color = item_image_color
 }
 
 -- podesavanja za deo Shop-a u kom se prikazuje cena trenutno selektovanog item-a (odn. dugmeta)
-local ip_x = x
-local ip_y = y + height * 5 / 6
-local ip_width = width * 1 / 5
-local ip_height = height * 1 / 6
-local ip_color = {44/255, 50/255, 201/255}
+local item_price_x = x
+local item_price_y = y + height * 5 / 6
+local item_price_width = width * 1 / 5
+local item_price_height = height * 1 / 6
+local item_price_color = {44/255, 50/255, 201/255}
 
 local item_price_settings = {
-    x = ip_x,
-    y = ip_y,
-    width = ip_width,
-    height = ip_height,
-    color = ip_color
+    x = item_price_x,
+    y = item_price_y,
+    width = item_price_width,
+    height = item_price_height,
+    color = item_price_color
 }
 
 -- podesavanja za deo Shop-a u kom se prikazuje opis trenutno selektovanog item-a (odn. dugmeta)
-local id_x = x + width * 1 / 5
-local id_y = y + height * 1 / 2
-local id_width = width * 4 / 5
-local id_height = height * 1 / 2
-local id_color = {50/255, 55/255, 227/255}
+local item_description_x = x + width * 1 / 5
+local item_description_y = y + height * 1 / 2
+local item_description_width = width * 4 / 5
+local item_description_height = height * 1 / 2
+local item_description_color = {50/255, 55/255, 227/255}
 
 local item_description_settings = {
-    x = id_x,
-    y = id_y,
-    width = id_width,
-    height = id_height,
-    color = id_color
+    x = item_description_x,
+    y = item_description_y,
+    width = item_description_width,
+    height = item_description_height,
+    color = item_description_color
 }
 
 return {
