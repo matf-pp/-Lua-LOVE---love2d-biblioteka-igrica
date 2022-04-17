@@ -1,5 +1,5 @@
 require("lib.map")
-local level_data = require("levels.test_level_04")
+local level_data = require("lib.level_data")
 local shop_data = require("lib.shop_config")
 
 Shop = {}
@@ -17,12 +17,32 @@ function Shop:load()
     self.buttons.wall = {
         selected = false,
         now = false,
-        last = false
+        last = false,
+        image = level_data.images.wall_image
     }
 
     function self.buttons.wall:on_press()
+        for _, button in pairs(Shop.buttons) do
+            button.selected = false
+        end
         self.selected = true
     end
+
+    self.buttons.spikes = {
+        selected = false,
+        now = false,
+        last = false,
+        image = level_data.images.spikes_image_3
+    }
+
+    function self.buttons.spikes:on_press()
+        for _, button in pairs(Shop.buttons) do
+            button.selected = false
+        end
+        self.selected = true
+    end
+
+    self.selected_button = self.buttons.wall
 
     self.areas = {}
 
@@ -85,7 +105,7 @@ function Shop:load()
                 end
 
                 local quad = love.graphics.newQuad(0, 0, 48, 48, self.button_width, self.button_height)
-                love.graphics.draw(level_data.images.wall_image, quad, bx, by, 0, 1, 1, self.button_width / 2, self.button_height / 2)
+                love.graphics.draw(button.image, quad, bx, by, 0, 1, 1, self.button_width / 2, self.button_height / 2)
 
                 cursor_x = cursor_x + self.button_width + margin
             end
@@ -102,7 +122,7 @@ function Shop:load()
             love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
         end
     }
-    self.areas.selected = {
+    self.areas.selected_item = {
         x = self.x,
         y = self.y + self.height * 1 / 2,
         width = self.width * 1 / 5,
@@ -141,8 +161,14 @@ function Shop:update(dt)
     -- TODO
     if self.buttons.wall.selected == true and love.mouse.isDown(2) then
         local dx, dy =  love.mouse.getPosition()
-        Map:add_wall(dx,dy)
+        Map:add_wall(dx, dy)
         self.buttons.wall.selected = false
+    end
+
+    if self.buttons.spikes.selected == true and love.mouse.isDown(2) then
+        local dx, dy =  love.mouse.getPosition()
+        Map:add_spikes(dx, dy)
+        self.buttons.spikes.selected = false
     end
 end
 
@@ -154,3 +180,5 @@ function Shop:draw()
         area:draw()
     end
 end
+
+return Shop

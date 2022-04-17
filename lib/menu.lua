@@ -101,6 +101,7 @@ local function start_function()
             length = length + 1
         end
         print("done")
+        print(path.life_cost)
 
         Boss.length = length
         Boss.phase = "run"

@@ -1,4 +1,4 @@
-local level_data = require("levels.test_level_04")
+local level_data = require("lib.level_data")
 local map_data = require("lib.map_config")
 
 Map = {}
@@ -218,6 +218,29 @@ function Map:add_wall(x, y)
     return true
 end
 
+function Map:add_spikes(x, y)
+    local dx = x - self.grid_x
+    local dy = y - self.grid_y
+    local i = math.floor(dy / self.field_side) + 1
+    local j = math.floor(dx / self.field_side) + 1
+
+    if i <= 0 or i > self.m or j <= 0 or j > self.n then
+        return false
+    end
+
+    local field = self.grid[i][j]
+
+    if field.is_start or field.is_end or field.has_wall or field.has_spikes then
+        return false
+    end
+
+    self.grid[i][j].has_spikes = true
+    self.grid[i][j].damage = 1
+    print("Uspesno dodati spikes na koordinatama ( "..dx.." , "..dy.." )")
+
+    return true
+end
+
 --[[
     Funkcija vraca table u kome se nalaze cvorovi na putanji od pocetnog do krajnjeg polja na mapi,
         odn. prazan table ako putanja ne postoji.
@@ -227,11 +250,7 @@ function Map:find_path()
     table.sort(
         paths,
         function (a, b)
-            if a.life_cost > b.life_cost then
-                return false
-            else
-                return a.length < b.length
-            end
+            return (a.length < b.length and a.life_cost == b.life_cost) or a.life_cost < b.life_cost
         end
     )
 
