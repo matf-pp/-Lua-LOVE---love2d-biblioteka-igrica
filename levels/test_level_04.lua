@@ -9,8 +9,6 @@ local spikes_image_1 = love.graphics.newImage("images/floor_spikes_anim_f1.png")
 local spikes_image_2 = love.graphics.newImage("images/floor_spikes_anim_f2.png")
 local spikes_image_3 = love.graphics.newImage("images/floor_spikes_anim_f3.png")
 
-local image_scale_factor = 1
-
 return {
     data = {
         1,3,3,3,3,3,3,3,3,3,4,4,4,3,3,3,3,3,3,3,
@@ -37,7 +35,5 @@ return {
     wall_id = 4,
     start_id = 1,
     end_id = 2,
-    spikes_id = 5,
-
-    image_scale_factor = image_scale_factor
+    spikes_id = 5
 }

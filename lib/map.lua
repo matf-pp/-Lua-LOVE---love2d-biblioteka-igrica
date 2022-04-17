@@ -213,7 +213,6 @@ function Map:add_wall(x, y)
     end
 
     self.grid[i][j].has_wall = true
-    print("Uspesno dodat zid na koordinatama ( "..dx.." , "..dy.." )")
 
     return true
 end
@@ -236,7 +235,6 @@ function Map:add_spikes(x, y)
 
     self.grid[i][j].has_spikes = true
     self.grid[i][j].damage = 1
-    print("Uspesno dodati spikes na koordinatama ( "..dx.." , "..dy.." )")
 
     return true
 end

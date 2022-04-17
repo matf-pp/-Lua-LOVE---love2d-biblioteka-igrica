@@ -22,7 +22,7 @@ function Shop_item_description:draw()
     local text = self.text
     local font = love.graphics.newFont(20)
     love.graphics.setFont(font)
-    love.graphics.print(text, self.x + 30, self.y + 20)
+    love.graphics.print(text, self.x + 30, self.y + 15)
 end
 
 return Shop_item_description
