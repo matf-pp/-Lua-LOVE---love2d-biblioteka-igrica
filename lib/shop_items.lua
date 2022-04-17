@@ -10,7 +10,8 @@ function Shop_items:load()
         now = false,
         last = false,
         image = level_data.images.wall_image,
-        cost = 3
+        cost = 3,
+        description = "WALL.\nPlaces a wall on a clear field."
     }
 
     function self.buttons.wall:on_press()
@@ -21,12 +22,17 @@ function Shop_items:load()
         Shop_items.selected_item = self
     end
 
+    function self.buttons.wall:effect(x, y)
+        return Map:add_wall(x, y)
+    end
+
     self.buttons.spikes = {
         selected = false,
         now = false,
         last = false,
         image = level_data.images.spikes_image_3,
-        cost = 1
+        cost = 1,
+        description = "spikes description (TODO)"
     }
 
     function self.buttons.spikes:on_press()
@@ -36,36 +42,42 @@ function Shop_items:load()
         self.selected = true
         Shop_items.selected_item = self
     end
+    
+    function self.buttons.spikes:effect(x, y)
+        return Map:add_spikes(x, y)
+    end
 
     for _, button in pairs(self.buttons) do
-        function button:pay()
+        function button:can_pay()
             local new_balance = Shop.areas.currency.available - self.cost
             if new_balance < 0 then
                 print("no can do, sir")
                 return false
-            else
-                Shop.areas.currency.available = new_balance
-                return true
+            end
+            return true
+        end
+
+        function button:pay()
+            Shop.areas.currency.available = Shop.areas.currency.available - self.cost
+        end
+
+        function button:update(dt)
+            if self.selected == true and love.mouse.isDown(2) then
+                local dx, dy =  love.mouse.getPosition()
+                if self:can_pay() == true then
+                    if self:effect(dx, dy) == true then
+                        self:pay()
+                    end
+                end
+                self.selected = false
             end
         end
     end
 end
 
 function Shop_items:update(dt)
-    if self.buttons.wall.selected == true and love.mouse.isDown(2) then
-        local dx, dy =  love.mouse.getPosition()
-        if self.buttons.wall:pay() == true then
-            Map:add_wall(dx, dy)
-        end
-        self.buttons.wall.selected = false
-    end
-
-    if self.buttons.spikes.selected == true and love.mouse.isDown(2) then
-        local dx, dy =  love.mouse.getPosition()
-        if self.buttons.spikes:pay() == true then
-            Map:add_spikes(dx, dy)
-        end
-        self.buttons.spikes.selected = false
+    for _, button in pairs(self.buttons) do
+        button:update(dt)
     end
 end
 

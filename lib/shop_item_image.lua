@@ -1,15 +1,15 @@
 Shop_item_image = require("lib.shop_config").item_image_settings
 
 function Shop_item_image:load()
-    -- TODO
-    self.image = love.graphics.newImage("images/wall2.png")
+    self.default_image = love.graphics.newImage("images/floor_1.png")
 end
 
 function Shop_item_image:update(dt)
-    -- TODO
     local selected_item = Shop.areas.items.selected_item
     if next(selected_item) ~= nil then
         self.image = selected_item.image
+    else
+        self.image = self.default_image
     end
 end
 

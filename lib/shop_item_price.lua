@@ -18,6 +18,7 @@ function Shop_item_price:draw()
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 
     love.graphics.setColor(1, 1, 1)
+    love.graphics.setFont(Shop.shop_font)
     local text = self.cost
     local font = Shop.shop_font
     local text_width = font:getWidth(text)

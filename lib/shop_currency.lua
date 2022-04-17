@@ -14,6 +14,7 @@ function Shop_currency:draw()
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 
     love.graphics.setColor(1, 1, 1)
+    love.graphics.setFont(Shop.shop_font)
     local text = self.available
     local font = Shop.shop_font
     local text_width = font:getWidth(text)
