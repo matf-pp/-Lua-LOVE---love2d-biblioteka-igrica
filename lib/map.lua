@@ -257,6 +257,11 @@ function Map:find_path()
     end
     
     local result_reverse = paths[1].nodes
+    local life_cost = paths[1].life_cost
+    if life_cost >= Boss.health then
+        return {}
+    end
+
     local result = {}
 
     for i = #result_reverse, 1, -1 do
