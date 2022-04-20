@@ -108,7 +108,6 @@ local function start_function()
 end
 
 local function reset_function()
-    print("Resetting level")
     love.load()
 end
 

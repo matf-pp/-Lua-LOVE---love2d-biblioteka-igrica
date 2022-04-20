@@ -41,28 +41,29 @@ function Map:load()
             
             field.damage = 0
 
-            -- podaci o karakteristikama polja, odn. njegovom tipu
-            field.has_wall = false
-            field.is_start = false
-            field.is_end = false
-            field.has_spikes = false
+            -- podaci o tipu polja
+            field.type = "empty"
 
-            if level_data.grid_data[k] == level_data.wall_id then
-                field.has_wall = true
+            if level_data.grid_data[k] == level_data.path_id then
+                field.type = "path"
             end
 
             if level_data.grid_data[k] == level_data.start_id then
-                field.is_start = true
+                field.type = "start"
                 self.start_field = field
             end
 
             if level_data.grid_data[k] == level_data.end_id then
-                field.is_end = true
+                field.type = "end"
                 self.end_field = field
             end
 
+            if level_data.grid_data[k] == level_data.wall_id then
+                field.type = "wall"
+            end
+
             if level_data.grid_data[k] == level_data.spikes_id then
-                field.has_spikes = true
+                field.type = "spikes"
                 field.damage = field.damage + 1
             end
 
@@ -71,7 +72,7 @@ function Map:load()
             -- grafika polja
             field.x = self.grid_x + (field.column - 1) * self.field_side
             field.y = self.grid_y + (field.row - 1) * self.field_side
-            field.image = level_data.images.path_image
+            field.image = nil
             field.quad = love.graphics.newQuad(0, 0, 48, 48, 48, 48)
             field.scale_factor = level_data.image_scale_factor
             field.clock = 0
@@ -82,13 +83,15 @@ function Map:load()
             end
 
             function field:update_image(dt)
-                if self.is_start then
+                if self.type == "path" then
+                    self.image = level_data.images.path_image
+                elseif self.type == "start" then
                     self.image = level_data.images.start_image
-                elseif self.is_end then
+                elseif self.type == "end" then
                     self.image = level_data.images.end_image
-                elseif self.has_wall then
+                elseif self.type == "wall" then
                     self.image = level_data.images.wall_image
-                elseif self.has_spikes then
+                elseif self.type == "spikes" then
                     if self.clock >= 0 and self.clock < 0.05 then
                         self.image = level_data.images.spikes_image_0
                     elseif self.clock >= 0.05 and self.clock < 0.1 then
@@ -107,13 +110,15 @@ function Map:load()
                         self.clock = 0
                     end
                 else
-                    self.image = level_data.images.path_image
+                    self.image = nil
                 end
             end
 
             function field:draw()
-                love.graphics.setColor(1, 1, 1)
-                love.graphics.draw(self.image, self.quad, self.x, self.y, 0, self.scale_factor, self.scale_factor)
+                if self.image ~= nil then
+                    love.graphics.setColor(1, 1, 1)
+                    love.graphics.draw(self.image, self.quad, self.x, self.y, 0, self.scale_factor, self.scale_factor)
+                end
             end
         end
     end
@@ -155,7 +160,7 @@ function Map:set_branches()
             -- up
             if self.grid[i-1] ~= nil then
                 local up = self.grid[i-1][j]
-                if up.has_wall == false then
+                if up.type ~= "wall" then
                     table.insert(current.neighbors, up)
                 end
             end
@@ -163,7 +168,7 @@ function Map:set_branches()
             -- down
             if self.grid[i+1] ~= nil then
                 local down = self.grid[i+1][j]
-                if down.has_wall == false then
+                if down.type ~= "wall" then
                     table.insert(current.neighbors, down)
                 end
             end
@@ -171,7 +176,7 @@ function Map:set_branches()
             -- left
             local left = self.grid[i][j-1]
             if left ~= nil then
-                if left.has_wall == false then
+                if left.type ~= "wall" then
                     table.insert(current.neighbors, left)
                 end
             end
@@ -179,7 +184,7 @@ function Map:set_branches()
             -- right
             local right = self.grid[i][j+1]
             if right ~= nil then
-                if right.has_wall == false then
+                if right.type ~= "wall" then
                     table.insert(current.neighbors, right)
                 end
             end
@@ -208,11 +213,11 @@ function Map:add_wall(x, y)
 
     local field = self.grid[i][j]
 
-    if field.is_start or field.is_end or field.has_wall or field.has_spikes then
+    if field.type == "start" or field.type == "end" or field.type == "wall" or field.type == "spikes" then
         return false
     end
 
-    self.grid[i][j].has_wall = true
+    self.grid[i][j].type = "wall"
 
     return true
 end
@@ -229,11 +234,11 @@ function Map:add_spikes(x, y)
 
     local field = self.grid[i][j]
 
-    if field.is_start or field.is_end or field.has_wall or field.has_spikes then
+    if field.type == "start" or field.type == "end" or field.type == "wall" or field.type == "spikes" then
         return false
     end
 
-    self.grid[i][j].has_spikes = true
+    self.grid[i][j].type = "spikes"
     self.grid[i][j].damage = 1
 
     return true
@@ -289,7 +294,7 @@ function Map:all_paths(start, finish)
     local paths = {}
     
     for _, neighbor in pairs(start.neighbors) do
-        if neighbor.visited == false and neighbor.has_wall == false then
+        if neighbor.visited == false and neighbor.type ~= "wall" then
             local neighbor_paths = self:all_paths(neighbor, finish)
             for _, neighbor_path in pairs(neighbor_paths) do
                 table.insert(neighbor_path.nodes, start)
