@@ -7,14 +7,14 @@ local spikes_image_0 = love.graphics.newImage("images/floor_spikes_anim_f0.png")
 local spikes_image_1 = love.graphics.newImage("images/floor_spikes_anim_f1.png")
 local spikes_image_2 = love.graphics.newImage("images/floor_spikes_anim_f2.png")
 local spikes_image_3 = love.graphics.newImage("images/floor_spikes_anim_f3.png")
-local boss_idle_0 = love.graphics.newImage("images/skelet_idle_anim_f0.png")
-local boss_idle_1 = love.graphics.newImage("images/skelet_idle_anim_f1.png")
-local boss_idle_2 = love.graphics.newImage("images/skelet_idle_anim_f2.png")
-local boss_idle_3 = love.graphics.newImage("images/skelet_idle_anim_f3.png")
-local boss_run_0 = love.graphics.newImage("images/skelet_run_anim_f0.png")
-local boss_run_1 = love.graphics.newImage("images/skelet_run_anim_f1.png")
-local boss_run_2 = love.graphics.newImage("images/skelet_run_anim_f2.png")
-local boss_run_3 = love.graphics.newImage("images/skelet_run_anim_f3.png")
+local boss_idle_0 = love.graphics.newImage("images/chort_idle_anim_f0.png")
+local boss_idle_1 = love.graphics.newImage("images/chort_idle_anim_f1.png")
+local boss_idle_2 = love.graphics.newImage("images/chort_idle_anim_f2.png")
+local boss_idle_3 = love.graphics.newImage("images/chort_idle_anim_f3.png")
+local boss_run_0 = love.graphics.newImage("images/chort_run_anim_f0.png")
+local boss_run_1 = love.graphics.newImage("images/chort_run_anim_f1.png")
+local boss_run_2 = love.graphics.newImage("images/chort_run_anim_f2.png")
+local boss_run_3 = love.graphics.newImage("images/chort_run_anim_f3.png")
 
 return {
     grid_data = {
@@ -55,5 +55,8 @@ return {
     spikes_id = 5,
     shop = {
         starting_money = 3
+    },
+    boss = {
+        starting_health = 3
     }
 }

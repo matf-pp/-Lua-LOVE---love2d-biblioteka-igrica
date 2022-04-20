@@ -1,5 +1,6 @@
-local boss_images = require("lib.level_data").images.boss
+local level_data = require("lib.level_data")
 
+local boss_images = level_data.images.boss
 local boss_idle_0 = boss_images.boss_idle_0
 local boss_idle_1 = boss_images.boss_idle_1
 local boss_idle_2 = boss_images.boss_idle_2
@@ -8,7 +9,7 @@ local boss_run_0 = boss_images.boss_run_0
 local boss_run_1 = boss_images.boss_run_1
 local boss_run_2 = boss_images.boss_run_2
 local boss_run_3 = boss_images.boss_run_3
-local quad = love.graphics.newQuad(0, 0, boss_idle_0:getWidth(), boss_idle_0:getHeight(), boss_idle_0:getWidth(), boss_idle_0:getHeight())
+local quad = love.graphics.newQuad(0, 0, 16, 24, 16, 24)
 
 local index
 
@@ -28,6 +29,7 @@ function Boss:load()
     
     self.timer = 0
     self.image = boss_idle_0
+    self.health = level_data.boss.starting_health
 
     self.phase = "idle"
     self.position = {
@@ -97,5 +99,5 @@ function Boss:update(dt)
 end
 
 function Boss:draw()
-    love.graphics.draw(self.image, quad, self.position.x, self.position.y , 0, 3, 3)
+    love.graphics.draw(self.image, quad, self.position.x, self.position.y , 0, 3, 3, 0, 8)
 end

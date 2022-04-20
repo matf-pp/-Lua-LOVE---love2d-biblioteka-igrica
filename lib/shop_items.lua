@@ -65,7 +65,7 @@ function Shop_items:load()
         end
 
         function button:update(dt)
-            if self.selected == true and love.mouse.isDown(2) then
+            if self.selected == true and love.mouse.isDown(2) and Boss.phase == "idle" then
                 local dx, dy =  love.mouse.getPosition()
                 if self:can_pay() == true then
                     if self:effect(dx, dy) == true then
