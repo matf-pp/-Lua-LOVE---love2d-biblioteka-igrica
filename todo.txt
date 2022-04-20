@@ -2,7 +2,7 @@ Nedelja 18. april - 24. april
 -----------------------------
 
 Funkcionisanje igrice:
-    - health od Boss-a (spikes, ...)
+    + health od Boss-a (spikes, ...)
 
 Nivoi:
     - napraviti vise (smislenih) nivoa
