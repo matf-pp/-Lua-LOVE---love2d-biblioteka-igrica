@@ -54,7 +54,11 @@ return {
     end_id = 2,
     spikes_id = 5,
     shop = {
-        starting_money = 3
+        starting_money = 3,
+        available_buttons = {
+            wall = {},
+            --spikes = {}
+        }
     },
     boss = {
         starting_health = 3

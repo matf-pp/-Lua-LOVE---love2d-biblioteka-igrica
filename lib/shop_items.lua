@@ -2,10 +2,7 @@ Shop_items = require("lib.shop_config").items_settings
 local level_data = require("lib.shop_config").level_data
 
 function Shop_items:load()
-    self.buttons = {
-        wall = {},
-        spikes = {}
-    }
+    self.buttons = level_data.shop.available_buttons
     self.selected_item = {}
 
     self.buttons.wall = {
@@ -17,14 +14,16 @@ function Shop_items:load()
         description = "WALL\n\nPlaces a wall on a clear field. Walls are\nimpassable."
     }
 
-    self.buttons.spikes = {
-        selected = false,
-        now = false,
-        last = false,
-        image = level_data.images.spikes_image_3,
-        cost = 1,
-        description = "SPIKES\n\nPlaces spikes on a clear field. Spikes hurt\nmonsters walking over them."
-    }
+    if self.buttons.spikes ~= nil then
+        self.buttons.spikes = {
+            selected = false,
+            now = false,
+            last = false,
+            image = level_data.images.spikes_image_3,
+            cost = 1,
+            description = "SPIKES\n\nPlaces spikes on a clear field. Spikes hurt\nmonsters walking over them."
+        }
+    end
 
     local margin = 16
     local cursor_x = 0
