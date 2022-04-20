@@ -3,6 +3,15 @@
 ## Description
 ... TODO ...
 
+## Technologies used
+... TODO ...
+
+## Requirements
+... TODO ...
+
+## Credits
+... TODO ...
+
 ## Authors
 
 Luka Sparić
