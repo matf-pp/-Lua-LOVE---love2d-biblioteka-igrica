@@ -5,14 +5,16 @@ function Shop_items:load()
     self.buttons = level_data.shop.available_buttons
     self.selected_item = {}
 
-    self.buttons.wall = {
-        selected = false,
-        now = false,
-        last = false,
-        image = level_data.images.wall_image,
-        cost = 3,
-        description = "WALL\n\nPlaces a wall on a clear field. Walls are\nimpassable."
-    }
+    if self.buttons.wall ~= nil then
+        self.buttons.wall = {
+            selected = false,
+            now = false,
+            last = false,
+            image = level_data.images.wall_image,
+            cost = 3,
+            description = "WALL\n\nPlaces a wall on a clear field. Walls are\nimpassable."
+        }
+    end
 
     if self.buttons.spikes ~= nil then
         self.buttons.spikes = {
@@ -71,7 +73,7 @@ function Shop_items:load()
                         self:pay()
                     end
                 end
-                self.selected = false
+                -- self.selected = false
             end
 
             self.last = self.now
