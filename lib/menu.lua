@@ -4,6 +4,44 @@ level_data = require("lib.level_data")
 Menu = {}
 local font = nil
 
+local function pick_lvl()
+    local buttons = {"LVL8","LVL7","LVL6","LVL5","LVL4","LVL3","LVL2","LVL1"}
+    local pressedbutton = love.window.showMessageBox( 'Levels', "Pick a level you want to play:",buttons, info, true)
+    
+    if pressedbutton == 8 then
+        print("picked lvl1")
+        level_data = require("levels.level_01")
+        love.load()
+    elseif pressedbutton == 7 then
+        print("picked lvl2")
+        level_data = require("levels.level_02")
+        love.load()
+    elseif pressedbutton == 6 then
+        print("picked lvl3")
+        level_data = require("levels.level_03")
+        love.load()
+    elseif pressedbutton == 5 then
+        print("picked lvl4")
+        level_data = require("levels.level_04")
+        love.load()
+    elseif pressedbutton == 4 then
+        print("picked lvl5")
+        level_data = require("levels.level_05")
+        love.load()
+    elseif pressedbutton == 3 then
+        print("picked lvl6")
+        level_data = require("levels.level_06")
+        love.load()
+    elseif pressedbutton == 2 then
+        print("picked lvl7")
+        level_data = require("levels.level_07")
+        love.load()
+    elseif pressedbutton == 1 then
+        print("picked lvl8")
+        level_data = require("levels.level_08")
+        love.load()
+    end
+end
 
 function Menu:new_button(text, fn, num)
     local x, y
@@ -91,7 +129,7 @@ local function start_function()
         print("path not found")
         local pressedbutton = love.window.showMessageBox( 'Congratulations', "Would you like to try again or pick another level?",buttons, info, true)
         if pressedbutton == 1 then
-            print("load new lvl")
+            pick_lvl()
         elseif pressedbutton == 2 then
             love.load()
         end
@@ -121,36 +159,7 @@ local function reset_function()
 end
 
 local function load_function()
-    -- TODO
-    local buttons = {"LVL6","LVL5","LVL4","LVL3","LVL2","LVL1"}
-    local pressedbutton = love.window.showMessageBox( 'Levels', "Pick a level you want play:",buttons, info, true)
-    --ne updejtuju se ostatak informacija iz lvl (npr coins koje zivode mozes da koristis) vec se samo menja lvl
-    --pored mape treba i shop za datu mapu da se update!!!
-    if pressedbutton == 6 then
-        print("picked lvl1")
-        level_data = require("levels.level_01")
-        love.load()
-    elseif pressedbutton == 5 then
-        print("picked lvl2")
-        level_data = require("levels.level_02")
-        love.load()
-    elseif pressedbutton == 4 then
-        print("picked lvl3")
-        level_data = require("levels.level_03")
-        love.load()
-    elseif pressedbutton == 3 then
-        print("picked lvl4")
-        level_data = require("levels.level_04")
-        love.load()
-    elseif pressedbutton == 2 then
-        print("picked lvl5")
-        level_data = require("levels.level_05")
-        love.load()
-    elseif pressedbutton == 1 then
-        print("picked lvl6")
-        level_data = require("levels.level_06")
-        love.load()
-    end
+    pick_lvl()
 
 end
 

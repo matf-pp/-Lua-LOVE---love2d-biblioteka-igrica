@@ -5,13 +5,13 @@ Funkcionisanje igrice:
     + health od Boss-a (spikes, ...)
 
 Nivoi:
-    - napraviti vise (smislenih) nivoa
-    - urediti nivoe prema hronoloskom redosledu/tezini
+    + napraviti vise (smislenih) nivoa
+    + urediti nivoe prema hronoloskom redosledu/tezini
     - napraviti .lua fajl za pracenje redosleda levela
 
 Popup-i i dugmici:
-    - implementirati Load dugme
-    - popup za win/lose scenario
+    + implementirati Load dugme
+    + popup za win/lose scenario
         - win: Next dugme za ucitavanje sledeceg nivoa
         - lose: Reset? Quit to Main Menu (Exit...?)
 
@@ -22,6 +22,6 @@ Opste stvari:
     - urediti README.md
     - prica za exe fajl
 
-Grafika:
++Grafika:
     - pozadina za Shop
     - podesiti orijentaciju Boss-a

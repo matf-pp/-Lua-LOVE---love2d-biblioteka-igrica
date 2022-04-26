@@ -105,9 +105,6 @@ function Boss:draw()
 
     love.graphics.draw(self.image, quad, self.position.x, self.position.y , 0, 3, 3, 0, 8)
     
-    --PROBLEM:
-    --ne iscrtava se animacija poslednjeg koraka boss-a pre nego sto izleti pop-up
-    --indikator kada je idle na kraju mozda
 
     
 
