@@ -1,5 +1,5 @@
 Shop_items = require("lib.shop_config").items_settings
-local level_data = require("lib.shop_config").level_data
+--local level_data = require("lib.shop_config").level_data
 
 function Shop_items:load()
     self.buttons = level_data.shop.available_buttons

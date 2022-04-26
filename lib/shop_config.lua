@@ -11,7 +11,7 @@ local shop_font = love.graphics.newFont(32)
 -- podesavanja vezana za konkretan nivo
 
 --local level_data = require("lib.level_data")
-local level_data = level_data
+--local level_data = level_data
 
 --local level_data = Level
 
