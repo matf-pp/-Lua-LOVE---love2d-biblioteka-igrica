@@ -9,10 +9,10 @@ local height = love.graphics.getHeight() * (1 - height_ratio)
 local shop_font = love.graphics.newFont(32)
 
 -- podesavanja vezana za konkretan nivo
---function shop_config:new_map()
 
-    local level_data = level_data
---end
+--local level_data = require("lib.level_data")
+local level_data = level_data
+
 --local level_data = Level
 
 -- podesavanja za ceo Shop
