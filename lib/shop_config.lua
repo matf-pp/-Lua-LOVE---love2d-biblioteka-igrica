@@ -1,3 +1,4 @@
+require("lib.menu")
 local height_ratio = 3 / 5
 local width_ratio = 3 / 5
 
@@ -8,7 +9,11 @@ local height = love.graphics.getHeight() * (1 - height_ratio)
 local shop_font = love.graphics.newFont(32)
 
 -- podesavanja vezana za konkretan nivo
-local level_data = require("lib.level_data")
+--function shop_config:new_map()
+
+    local level_data = level_data
+--end
+--local level_data = Level
 
 -- podesavanja za ceo Shop
 local shop_settings = {

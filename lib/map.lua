@@ -1,4 +1,6 @@
-local level_data = require("lib.level_data")
+require("lib.menu")
+
+--local level_data = require("lib.level_data")
 local map_data = require("lib.map_config")
 
 Map = {}

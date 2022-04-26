@@ -1,7 +1,9 @@
 local menu_data = require("lib.menu_config")
+level_data = require("lib.level_data")
 
 Menu = {}
 local font = nil
+
 
 function Menu:new_button(text, fn, num)
     local x, y
@@ -83,9 +85,16 @@ end
 local function start_function()
     print("Starting game")
     local path = Map:find_path()
-    
+    local buttons = {"Another Level","Try again"}
+
     if next(path) == nil then
         print("path not found")
+        local pressedbutton = love.window.showMessageBox( 'Congratulations', "Would you like to try again or pick another level?",buttons, info, true)
+        if pressedbutton == 1 then
+            print("load new lvl")
+        elseif pressedbutton == 2 then
+            love.load()
+        end
     else
         local length = 1
         print("path found:")
@@ -113,15 +122,48 @@ end
 
 local function load_function()
     -- TODO
-    print("Pick a level")
+    local buttons = {"LVL6","LVL5","LVL4","LVL3","LVL2","LVL1"}
+    local pressedbutton = love.window.showMessageBox( 'Levels', "Pick a level you want play:",buttons, info, true)
+    --ne updejtuju se ostatak informacija iz lvl (npr coins koje zivode mozes da koristis) vec se samo menja lvl
+    --pored mape treba i shop za datu mapu da se update!!!
+    if pressedbutton == 6 then
+        print("picked lvl1")
+        level_data = require("levels.level_01")
+        love.load()
+    elseif pressedbutton == 5 then
+        print("picked lvl2")
+        level_data = require("levels.level_02")
+        love.load()
+    elseif pressedbutton == 4 then
+        print("picked lvl3")
+        level_data = require("levels.level_03")
+        love.load()
+    elseif pressedbutton == 3 then
+        print("picked lvl4")
+        level_data = require("levels.level_04")
+        love.load()
+    elseif pressedbutton == 2 then
+        print("picked lvl5")
+        level_data = require("levels.level_05")
+        love.load()
+    elseif pressedbutton == 1 then
+        print("picked lvl6")
+        level_data = require("levels.level_06")
+        love.load()
+    end
+
 end
 
 local function exit_function()
-    -- TODO: implementirati popup koji ce da proveri sa korisnikom da li hoce zaista da izadje
-    love.event.quit(0)
+    local buttons = {"No","Yes"}
+    local pressedbutton = love.window.showMessageBox( 'Warning', "Are you sure you want to close the app?",buttons, info, true)
+    if pressedbutton == 2 then
+        love.event.quit(0)
+    end
 end
 
 function Menu:load()
+    
     font = love.graphics.newFont(32)
 
     self.x = menu_data.x

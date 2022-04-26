@@ -99,5 +99,23 @@ function Boss:update(dt)
 end
 
 function Boss:draw()
+    local xE = Map.end_field.x
+    local yE = Map.end_field.y
+    local buttons = {"Try again"}
+
     love.graphics.draw(self.image, quad, self.position.x, self.position.y , 0, 3, 3, 0, 8)
+    
+    --PROBLEM:
+    --ne iscrtava se animacija poslednjeg koraka boss-a pre nego sto izleti pop-up
+    --indikator kada je idle na kraju mozda
+
+    
+
+    if self.position.x == xE and self.position.y == yE  then
+        local pressedbutton = love.window.showMessageBox( 'Monster escaped!', "Would you like to try again?",buttons, info, true)
+        if pressedbutton == 1 then
+            love.load()
+        end
+    end
+    
 end
