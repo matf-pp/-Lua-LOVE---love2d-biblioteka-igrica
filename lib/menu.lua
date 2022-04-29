@@ -51,7 +51,7 @@ function Menu:new_button(text, fn, num)
     local margin_y
 
     width = self.width * 9 / 10
-    height = self.height * 2 / 10
+    height = self.height * 1.3 / 10
     margin_y = (self.height - self.num_buttons * height) / (self.num_buttons + 1)
     x = self.x + (self.width - width) / 2
     y = self.y + margin_y * num + height * (num - 1)
@@ -160,20 +160,26 @@ end
 
 local function load_function()
     pick_lvl()
-
 end
 
 local function exit_function()
     local buttons = {"No","Yes"}
-    local pressedbutton = love.window.showMessageBox( 'Warning', "Are you sure you want to close the app?",buttons, info, true)
+    local pressedbutton = love.window.showMessageBox( 'Warning', "Are you sure you want to exit the game?",buttons, info, true)
     if pressedbutton == 2 then
         love.event.quit(0)
     end
 end
 
+local function about_function()
+    -- TODO
+end
+
+local function help_function()
+    -- TODO
+end
+
 function Menu:load()
-    
-    font = love.graphics.newFont(32)
+    font = love.graphics.newFont(30)
 
     self.x = menu_data.x
     self.y = menu_data.y
@@ -181,11 +187,13 @@ function Menu:load()
     self.height = menu_data.height
     
     self.buttons = {}
-    self.num_buttons = 4
-    self.buttons.start = self:new_button("Start", start_function, 1)
-    self.buttons.reset = self:new_button("Reset", reset_function, 2)
-    self.buttons.load = self:new_button("Load", load_function, 3)
-    self.buttons.exit = self:new_button("Exit", exit_function, 4)
+    self.num_buttons = 6
+    self.buttons.help = self:new_button("Instructions", help_function, 1)
+    self.buttons.start = self:new_button("Start level", start_function, 2)
+    self.buttons.reset = self:new_button("Reset level", reset_function, 3)
+    self.buttons.load = self:new_button("Select level", load_function, 4)
+    self.buttons.about = self:new_button("About the game", about_function, 5)
+    self.buttons.exit = self:new_button("Exit game", exit_function, 6)
 end
 
 function Menu:update(dt)
