@@ -202,7 +202,6 @@ function Menu:draw()
 
     love.graphics.setColor(1, 1, 1)
     love.graphics.draw(bg_image, bg_quad, self.x, self.y, 0, 1, 1)
-
     -- crtanje dugmica
     for _, button in pairs(self.buttons) do
         button:draw()
