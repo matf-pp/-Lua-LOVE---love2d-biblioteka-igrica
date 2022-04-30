@@ -171,11 +171,28 @@ local function exit_function()
 end
 
 local function about_function()
-    -- TODO
+    local buttons = {"Ok"}
+    local pressedbutton = love.window.showMessageBox( 'About us:', "The creators of this projects are Robert Doža and Luka Sparić, students from the Faculty of Mathematics in Belgrade."
+                                                        .."\n We wanted to make some kind of a game that would use algorithms that we learnt in class, we agreed upon to use graph algorithm (kako se zove)for finding the correct path."
+                                                        .."\n Utilizing this algorithm we managed to make mini game that totally relies on it and makes a lot of space for improvement of the game in the future. ",buttons, info, true)
+    if pressedbutton == 1 then
+    end
 end
 
 local function help_function()
-    -- TODO
+    local buttons = {"Ok"}
+    local pressedbutton = love.window.showMessageBox( 'Rules of the game:', "In this puzzle game, your goal is not to let the monster slip through the dungeon exit. " 
+                                                            .."\n"
+                                                            .."\n You must use your reliable gold for obstacles that will make him unable to escape the dungeon."
+                                                            .."\n You can block his path with block item or put spikes item in his path, spikes deal 1 dmg to monster (monster has 3 health points)."
+                                                            .."\n"
+                                                            .."\n By left-clicking on the item in the shop you select the obstacle you want to use, right click on the map to place it."
+                                                            .."\n"
+                                                            .."\n After you are satisfied with your set-up press 'Start level' and hope for the best!"
+                                                            .."\n"
+                                                            .."\n Good luck and have fun!",buttons, info, true)
+        if pressedbutton == 1 then
+        end
 end
 
 function Menu:load()
