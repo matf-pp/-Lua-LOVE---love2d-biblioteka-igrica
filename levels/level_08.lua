@@ -16,9 +16,6 @@ local boss_run_1 = love.graphics.newImage("images/chort_run_anim_f1.png")
 local boss_run_2 = love.graphics.newImage("images/chort_run_anim_f2.png")
 local boss_run_3 = love.graphics.newImage("images/chort_run_anim_f3.png")
 
-
-
-
 return {
     grid_data = {
         4,3,3,3,3,3,3,3,4,3,4,4,4,3,3,3,3,3,3,3,

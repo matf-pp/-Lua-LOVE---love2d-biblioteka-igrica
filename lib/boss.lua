@@ -111,5 +111,4 @@ function Boss:draw()
             love.load()
         end
     end
-    
 end
