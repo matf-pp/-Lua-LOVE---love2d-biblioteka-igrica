@@ -172,9 +172,13 @@ end
 
 local function about_function()
     local buttons = {"Ok"}
-    local pressedbutton = love.window.showMessageBox( 'About us:', "The creators of this projects are Robert Doža and Luka Sparić, students from the Faculty of Mathematics in Belgrade."
-                                                        .."\n We wanted to make some kind of a game that would use algorithms that we learnt in class, we agreed upon to use graph algorithm (kako se zove)for finding the correct path."
-                                                        .."\n Utilizing this algorithm we managed to make mini game that totally relies on it and makes a lot of space for improvement of the game in the future. ",buttons, info, true)
+    local pressedbutton = love.window.showMessageBox( 'About us:', "The creators of this project are Robert Doža and Luka Sparić, students from the Faculty of Mathematics in Belgrade."
+                                                        .."\n"
+                                                        .."\n We wanted to make a game that would use some sort of graph algorithm that we learnt in class. "
+                                                        .."\n We agreed on using a basic, 'find all paths' graph algorithm based on DFS (depth-first search) for finding the correct path."
+                                                        .."\n Utilizing only this algorithm we managed to make a mini game that totally relies on it. Of course, there is a lot of space for improvement in the future."
+                                                        .."\n"
+                                                        .."\n We hope you enjoy the game! :D",buttons, info, true)
     if pressedbutton == 1 then
     end
 end
