@@ -185,14 +185,23 @@ end
 
 local function help_function()
     local buttons = {"Ok"}
-    local pressedbutton = love.window.showMessageBox( 'Rules of the game:', "In this puzzle game, your goal is not to let the monster slip through the dungeon exit. " 
+    local pressedbutton = love.window.showMessageBox( 'Rules of the game:',
+                                                            " In this puzzle game, there is a monster on one field of the map, and it wants to escape using the ladders on another field."
+                                                            .."\n The monster can move up, down, left and right. It will not try to move immediately though, only when you press the 'Start level' button."
+                                                            .."\n Your goal is to cleverly place certain obstacles on the map that will prevent the monster from reaching the ladders."
                                                             .."\n"
-                                                            .."\n You must use your reliable gold for obstacles that will make him unable to escape the dungeon."
-                                                            .."\n You can block his path with block item or put spikes item in his path, spikes deal 1 dmg to monster (monster has 3 health points)."
+                                                            .."\n In order to place obstacles on the map, you need to purchase them in the shop."
+                                                            .."\n There, you can see which obstacles are available and how much they cost. There are two types of obstacles:"
+                                                            .."\n - walls that completely block a field, rendering it impassable;"
+                                                            .."\n - spikes that reduce the monster's health points by 1 (the monster has 3 health points at the start, "
+                                                            .."\n    which essentially means that it can't pass over more than 2 spikes)"
                                                             .."\n"
-                                                            .."\n By left-clicking on the item in the shop you select the obstacle you want to use, right click on the map to place it."
+                                                            .."\n Left-click an obstacle to select it. Details of the selected obstacle, as well as its cost will appear in the shop."
+                                                            .."\n Then, right-click on the map to place the selected obstacle."
                                                             .."\n"
-                                                            .."\n After you are satisfied with your set-up press 'Start level' and hope for the best!"
+                                                            .."\n If at any point you make a mistake, you can always click the 'Reset level' button to reset the configuration of the map."
+                                                            .."\n"
+                                                            .."\n If you are satisfied with how you placed the obstacles, press 'Start level' and hope for the best!"
                                                             .."\n"
                                                             .."\n Good luck and have fun!",buttons, info, true)
         if pressedbutton == 1 then
