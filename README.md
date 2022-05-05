@@ -11,12 +11,11 @@ The game is written entirely in the Lua programming language. Lua is a simple an
 ### Framework
 The game is designed using the Love2D framework for creating 2D video games. To learn more about Love2D click here: https://love2d.org/
 
-## Requirements
-### Love2d
-To run the game, the user needs to install Love2D on their machine. This can be done on the official Love2D website: https://love2d.org/
-
-### Operating system
+## Operating system
 The game is primarily designed to run on the Windows operating system (preferably Windows 10 or above).
+
+## Running the game
+There are no special requirements to run the game. All one needs to do is download and extract the contents of the zipped files and run the MonsterEscape application.
 
 ## Credits
 We would like to thank the artist 0x72 for all the visual assets of the game. You can find more about them here:\
@@ -24,6 +23,5 @@ https://0x72.itch.io/
 
 ## Authors
 
-Luka Sparić
-
-Robert Doža
+Luka Sparić - luka.sparic98@gmail.com\
+Robert Doža - dozarobert98@gmail.com
