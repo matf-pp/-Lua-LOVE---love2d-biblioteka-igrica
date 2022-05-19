@@ -1,9 +1,9 @@
-# Monster Escape ![chort image](/images/chort_run_anim_f1.png "This is chort. Don't let him escape! :D")
+# Monster Escape ![chort image](/images/chort_readme.png "This is chort. Don't let him escape! :D")
 
 ## Description
 Monster Escape is a mini-game in which a monster is trying to escape a dungeon. To prevent this, the player needs to use certain obstacles and try to place them in a clever manner so that the monster cannot escape.
 
-![interface image](/images/interface.png "In-game look.")
+![interface image](/images/interface2.png "In-game look.")
 
 This project was made for the course "Design of programming languages", a course at the Faculty of Mathematics, University of Belgrade. Its goal is to be a first stand-alone project which is to be done by students independently of college course material. Also, the idea is for students to learn a completely new programming language from scratch.
 
